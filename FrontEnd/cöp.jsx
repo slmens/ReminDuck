@@ -1,30 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React from "react";
-import NavBar from "./NavBarComponents/Navbar";
-import { Formik } from "formik";
-import * as Yup from "yup";
-
-export default function CreateReminderPage() {
-  const daysOfWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-
-  const checkBoxDayOptions = daysOfWeek.map((day) => ({
-    key: "a" + day,
-    value: day,
-  }));
-
-  return (
-    <>
-      <NavBar />
-      <div>
-        <Formik
+{
+  /* <Formik
           initialValues={{
             header: "",
             desc: "",
@@ -39,7 +14,6 @@ export default function CreateReminderPage() {
           })}
           onSubmit={(values, { resetForm, setSubmitting }) => {
             console.log(values);
-            resetForm;
           }}
         >
           {({
@@ -51,7 +25,7 @@ export default function CreateReminderPage() {
             dirty,
             isSubmitting,
           }) => (
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
               <h3>Create Call Reminder</h3>
               <label htmlFor="header">Person to Call</label> <br />
               <input
@@ -75,32 +49,59 @@ export default function CreateReminderPage() {
                 onChange={handleChange}
               />
               <br />
-              <label htmlFor="checkBoxDiv">Checkbox for days to remind</label>
-              <br />
-              <div id="checkBoxDiv">
+              <h2>Checkbox for days to remind</h2>
+              <div>
+                <Field name="days">
+                  {({
+                    field, // { name, value, onChange, onBlur }
+                    form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+                    meta,
+                  }) => (
+                    <div>
+                      {checkBoxDayOptions.map((option) => {
+                        return (
+                          <div key={option.key + "a"} className="flex">
+                            <input
+                              type="checkbox"
+                              value={option.value}
+                              name={option.key}
+                              checked={values.days.includes(option.value)}
+                              onChange={handleChange}
+                              className="mr-3"
+                            />
+                            <label htmlFor={field.id}></label>
+                            <br />
+                          </div>
+                        );
+                      })}
+                      {meta.touched && meta.error && (
+                        <div className="error">{meta.error}</div>
+                      )}
+                    </div>
+                  )}
+                </Field>
+
                 {checkBoxDayOptions.map((option) => {
                   return (
-                    <div key={option.key} className="flex">
-                      <input
-                        id={option.key}
+                    <div key={option.key + "a"} className="flex">
+                      <Field
                         type="checkbox"
                         value={option.value}
+                        name={option.key}
                         checked={values.days.includes(option.value)}
-                        onChange={() => {}}
+                        onChange={handleChange}
+                        label={option.value}
                         className="mr-3"
                       />
-                      <label htmlFor={option.key}>{option.value}</label> <br />
+                      <br />
                     </div>
                   );
                 })}
               </div>
-              <button type="submit" disabled={!dirty || isSubmitting}>
+              <button type="submit" disabled={!dirty}>
                 Create Call Reminder
               </button>
-            </form>
+            </Form>
           )}
-        </Formik>
-      </div>
-    </>
-  );
+        </Formik>*/
 }
