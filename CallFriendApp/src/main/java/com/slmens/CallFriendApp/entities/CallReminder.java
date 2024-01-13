@@ -1,13 +1,16 @@
 package com.slmens.CallFriendApp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.slmens.CallFriendApp.core.DayOfWeek;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalTime;
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class CallReminder {
     @Column(name = "description")
     private String description;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "callReminderTime")
     private LocalTime callReminderTime;
 
@@ -38,7 +41,7 @@ public class CallReminder {
     @Column(name = "callReminderDays")
     private List<String> callReminderDays;
 
-    @JsonIgnoreProperties(value = {"callsToRemind"})
+    /* @JsonIgnoreProperties(value = {"callsToRemind"})
     @ManyToOne()
-    private User user;
+    private User user; */
 }

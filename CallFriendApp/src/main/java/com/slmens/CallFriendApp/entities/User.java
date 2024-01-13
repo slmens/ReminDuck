@@ -31,8 +31,8 @@ public class User {
     @Column(name = "mail")
     private String mail;
 
-    @JsonIgnoreProperties(value = {"user"})
+    /*@JsonIgnoreProperties(value = {"user"})
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     @Column(name = "callsToRemind")
-    private List<CallReminder> callsToRemind;
+    private List<CallReminder> callsToRemind;*/
 }
