@@ -3,10 +3,13 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
+import UpdateReminderPage from "../Pages/UpdateReminderPage";
 
 export default function CallReminderCard(props) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const history = useHistory();
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -14,8 +17,8 @@ export default function CallReminderCard(props) {
 
   const handleEdit = () => {
     // Implement your edit logic here
-    console.log("Edit clicked");
     setShowDropdown(!showDropdown);
+    history.push(`/create/${props.id}`);
   };
 
   const handleDelete = () => {
@@ -72,6 +75,15 @@ export default function CallReminderCard(props) {
         <div className="flex items-center">
           <FontAwesomeIcon icon={faCalendarDays} />
           <h2 className="ml-2 text-sm">{props.dateTime}</h2>
+          <div className="flex flex-row justify-end w-full flex-wrap">
+            {props.days.map((day) => {
+              return (
+                <h3 className="text-xs ml-2" key={day}>
+                  {day}
+                </h3>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

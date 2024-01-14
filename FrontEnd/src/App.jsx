@@ -5,6 +5,7 @@ import CreateReminderPage from "./components/Pages/CreateReminderPage";
 import Profile from "./components/Pages/Profile";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import UpdateReminderPage from "./components/Pages/UpdateReminderPage";
 
 function App() {
   const [callReminders, setCallReminders] = useState([]);
@@ -20,7 +21,6 @@ function App() {
 
   const compareDays = async () => {
     if (!currentDay) {
-      console.warn("Current day is not set. Skipping compareDays.");
       return [];
     }
 
@@ -44,7 +44,6 @@ function App() {
     };
 
     fetchDataAndSetToday();
-    console.log("a");
 
     // Cleanup code when the component unmounts
     return () => {
@@ -76,6 +75,11 @@ function App() {
             path="/profile"
             exact
             render={() => <Profile data={callReminders} />}
+          />
+          <Route
+            path="/create/:id"
+            exact
+            render={() => <CreateReminderPage reRender={reRender} />}
           />
         </Switch>
       </BrowserRouter>

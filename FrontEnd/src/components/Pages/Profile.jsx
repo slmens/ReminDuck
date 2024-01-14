@@ -22,6 +22,7 @@ export default function Profile({ data }) {
                 header={callReminder.whoToCall}
                 desc={callReminder.description}
                 dateTime={callReminder.callReminderTime}
+                days={callReminder.callReminderDays}
               />
             );
           })}

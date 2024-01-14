@@ -31,6 +31,8 @@ const [callReminders, setCallReminders] = useState([]);
 
   Yapmam gereken şey = cardları tek tek gez bugünün günüyle eşleşenleri kaydet ve bir kaç dakikada bir saatleri kontrol et
 
+  createReminderPage 119 da sorun var
+
 
 */
   }
@@ -56,6 +58,7 @@ const [callReminders, setCallReminders] = useState([]);
                 header={callReminder.whoToCall}
                 desc={callReminder.description}
                 dateTime={callReminder.callReminderTime}
+                days={callReminder.callReminderDays}
               />
             );
           })}
