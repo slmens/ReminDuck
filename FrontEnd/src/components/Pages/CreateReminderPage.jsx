@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { useState, useEffect } from "react";
@@ -7,7 +8,7 @@ import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import { useHistory } from "react-router-dom";
 
-export default function CreateReminderPage() {
+export default function CreateReminderPage({ reRender }) {
   const [values, setValues] = useState({
     whoToCall: "",
     description: "",
@@ -44,6 +45,8 @@ export default function CreateReminderPage() {
     });
 
     setSubmitSuccess(true);
+
+    reRender();
 
     history.push("/");
   };
@@ -98,9 +101,9 @@ export default function CreateReminderPage() {
   ));
 
   return (
-    <>
+    <div className="h-screen bg-black">
       <NavBar />
-      <div className="w-full h-screen flex flex-col justify-center items-center text-center bg-black">
+      <div className="w-full flex flex-col justify-center items-center text-center bg-black">
         <div className="py-[40px] px-[40px] flex flex-col items-center rounded-lg border-2 border-primary-color justify-center bg-white">
           <h1 className="mb-5 text-4xl font-bold">Create Call Reminder</h1>
           <form onSubmit={handleSubmit}>
@@ -166,6 +169,6 @@ export default function CreateReminderPage() {
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

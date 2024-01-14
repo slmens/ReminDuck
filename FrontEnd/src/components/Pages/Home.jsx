@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import Card from "../ReusableComponents/CallReminderCard";
 import NavBar from "../NavBarComponents/Navbar";
-import axios from "axios";
 
-export default function Home() {
-  const [callReminders, setCallReminders] = useState([]);
+export default function Home({ data, reRender }) {
+  {
+    /* 
+const [callReminders, setCallReminders] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,21 +25,34 @@ export default function Home() {
     };
   }, []);
 
-  console.log(callReminders);
+
+  Cardın dizaynını düzenle günleri falan göster
+  edit kısmını yap
+
+  Yapmam gereken şey = cardları tek tek gez bugünün günüyle eşleşenleri kaydet ve bir kaç dakikada bir saatleri kontrol et
+
+
+*/
+  }
+
+  useEffect(() => {
+    reRender();
+  }, []);
 
   return (
-    <div className="h-screen bg-black">
+    <div className="h-screen min-h-full bg-black">
       <NavBar />
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center bg-black pb-12">
         <h1 className="text-white text-center font-sans font-bold text-3xl">
           Hello Name, <br /> That&apos;s All For Today&apos;s Calls. <br /> Have
           a Great One!
         </h1>
         <div className="grid grid-cols-2 gap-14 mt-14">
-          {callReminders.map((callReminder) => {
+          {data.map((callReminder) => {
             return (
               <Card
                 key={callReminder.id}
+                id={callReminder.id}
                 header={callReminder.whoToCall}
                 desc={callReminder.description}
                 dateTime={callReminder.callReminderTime}
