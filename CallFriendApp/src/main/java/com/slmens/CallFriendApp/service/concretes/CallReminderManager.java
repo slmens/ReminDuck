@@ -71,7 +71,7 @@ public class CallReminderManager implements ICallReminderService {
                 callReminderToUpdate.setWhoToCall(callReminderUpdateDTO.getWhoToCall());
                 //callReminderToUpdate.setCallReminderDays(dayEnums);
                 callReminderToUpdate.setCallReminderDays(callReminderUpdateDTO.getCallReminderDays());
-                callReminderToUpdate.setCallReminderTime(callReminderToUpdate.getCallReminderTime());
+                callReminderToUpdate.setCallReminderTime(callReminderUpdateDTO.getCallReminderTime());
 
                 this.callReminderRepository.save(callReminderToUpdate);
 

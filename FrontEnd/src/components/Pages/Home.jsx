@@ -26,12 +26,11 @@ const [callReminders, setCallReminders] = useState([]);
   }, []);
 
 
-  Cardın dizaynını düzenle günleri falan göster
-  edit kısmını yap
-
   Yapmam gereken şey = cardları tek tek gez bugünün günüyle eşleşenleri kaydet ve bir kaç dakikada bir saatleri kontrol et
 
-  createReminderPage 119 da sorun var
+  setinterval
+
+  İlk seferinde create ve update metodları çalıştığında ve home'a geldiğinde update etmiyor
 
 
 */

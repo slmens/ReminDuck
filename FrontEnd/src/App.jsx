@@ -79,7 +79,9 @@ function App() {
           <Route
             path="/create/:id"
             exact
-            render={() => <CreateReminderPage reRender={reRender} />}
+            render={() => (
+              <CreateReminderPage data={callReminders} reRender={reRender} />
+            )}
           />
         </Switch>
       </BrowserRouter>

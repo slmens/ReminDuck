@@ -20,7 +20,7 @@ public class CallReminderUpdateDTO {
 
     private String description;
 
-    private String callReminderTime;
+    private LocalTime callReminderTime;
 
     private List<String> callReminderDays;
 }

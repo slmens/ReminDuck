@@ -10,11 +10,11 @@ import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 
-export default function CreateReminderPage({ reRender }) {
+export default function CreateReminderPage({ reRender, data }) {
   const { id } = useParams();
 
   const [values, setValues] = useState({
-    id: "",
+    id: "Name",
     whoToCall: "",
     description: "",
     callReminderDays: [],
@@ -38,16 +38,45 @@ export default function CreateReminderPage({ reRender }) {
     value: day,
   }));
 
-  const handleSubmit = (e) => {
+  const handleCreate = (e) => {
+    e.preventDefault();
+    const reminderToCreate = {
+      whoToCall: values.whoToCall,
+      description: values.description,
+      callReminderDays: values.callReminderDays,
+      callReminderTime: values.callReminderTime,
+    };
+
+    fetch(`http://localhost:8080/callReminder/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reminderToCreate),
+    })
+      .then(() => {
+        console.log("Reminder created");
+      })
+      .catch((error) => {
+        console.error("Error creating reminder:", error);
+      });
+
+    setSubmitSuccess(true);
+
+    reRender();
+
+    history.push("/");
+  };
+
+  const handleUpdate = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:8080/callReminder/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    }).then(() => {
-      console.log("reminder updated");
-    });
+    axios
+      .put(`http://localhost:8080/callReminder/${id}`, values)
+      .then((response) => {
+        console.log("Reminder updated");
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
 
     setSubmitSuccess(true);
 
@@ -64,7 +93,7 @@ export default function CreateReminderPage({ reRender }) {
           id: `${response.data.id}`,
           whoToCall: `${response.data.whoToCall}`,
           description: `${response.data.description}`,
-          callReminderDays: `${response.data.callReminderDays}`,
+          callReminderDays: response.data.callReminderDays,
           callReminderTime: `${response.data.callReminderTime}`,
         })
       )
@@ -72,8 +101,18 @@ export default function CreateReminderPage({ reRender }) {
   };
 
   useEffect(() => {
-    if (id !== undefined) {
-      fetchData();
+    if (id !== undefined && !submitSuccess) {
+      const reminderToUpdate = data.find((reminder) => reminder.id == id);
+
+      if (reminderToUpdate) {
+        setValues({
+          id: reminderToUpdate.id,
+          whoToCall: reminderToUpdate.whoToCall,
+          description: reminderToUpdate.description,
+          callReminderDays: reminderToUpdate.callReminderDays,
+          callReminderTime: reminderToUpdate.callReminderTime,
+        });
+      }
     }
 
     if (submitSuccess) {
@@ -91,7 +130,7 @@ export default function CreateReminderPage({ reRender }) {
       // Cleanup the timeout to prevent memory leaks
       return () => clearTimeout(timeoutId);
     }
-  }, [submitSuccess]);
+  }, [id, data, submitSuccess]);
 
   const onChange = (e) => {
     const { name, type, checked, value } = e.target;
@@ -111,6 +150,7 @@ export default function CreateReminderPage({ reRender }) {
     } else {
       if (name === "callReminderTime") {
         setValues({ ...values, [name]: value });
+        console.log(values);
       } else if (type === "checkbox") {
         setValues((prevValues) => {
           const currentDays = prevValues.callReminderDays || [];
@@ -141,8 +181,6 @@ export default function CreateReminderPage({ reRender }) {
     </div>
   ));
 
-  console.log(values);
-
   return (
     <div className="h-screen bg-black">
       <NavBar />
@@ -151,7 +189,7 @@ export default function CreateReminderPage({ reRender }) {
           <h1 className="mb-5 text-4xl font-bold">
             {id === undefined ? "Create Call Reminder" : "Update Call reminder"}
           </h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={id === undefined ? handleCreate : handleUpdate}>
             <div id="NameDiv" className="flex flex-col">
               <label htmlFor="whoToCall" className="mb-3 text-1xl font-bold">
                 Person to Call
@@ -159,7 +197,7 @@ export default function CreateReminderPage({ reRender }) {
               <input
                 type="text"
                 name="whoToCall"
-                placeholder={id === undefined ? "Name" : {}}
+                placeholder={"Name"}
                 id="whoToCall"
                 required={true}
                 value={values.whoToCall}
@@ -206,6 +244,7 @@ export default function CreateReminderPage({ reRender }) {
 
               <button
                 type="submit"
+                name={id === undefined ? "Create" : "Update"}
                 className="py-2 px-12 rounded-lg border-4 border-primary-color mt-5"
               >
                 {id === undefined ? "Submit" : "Update"}
