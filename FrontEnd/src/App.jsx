@@ -65,7 +65,7 @@ function App() {
             render={() => (
               <Home
                 data={filteredReminders.current}
-                setCallReminders={updateCallReminders}
+                updateCallReminders={updateCallReminders}
               />
             )}
           />
@@ -73,7 +73,7 @@ function App() {
             path="/create"
             exact
             render={() => (
-              <CreateReminderPage setCallReminders={updateCallReminders} />
+              <CreateReminderPage updateCallReminders={updateCallReminders} />
             )}
           />
           <Route
@@ -87,7 +87,7 @@ function App() {
             render={() => (
               <CreateReminderPage
                 data={callReminders}
-                setCallReminders={updateCallReminders}
+                updateCallReminders={updateCallReminders}
               />
             )}
           />

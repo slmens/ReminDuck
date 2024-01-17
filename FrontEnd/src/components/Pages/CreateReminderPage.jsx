@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 
-export default function CreateReminderPage({ setCallReminders, data }) {
+export default function CreateReminderPage({ updateCallReminders, data }) {
   const { id } = useParams();
 
   const [values, setValues] = useState({
@@ -61,9 +61,8 @@ export default function CreateReminderPage({ setCallReminders, data }) {
         console.error("Error creating reminder:", error);
       });
 
+    updateCallReminders();
     setSubmitSuccess(true);
-
-    setCallReminders();
 
     history.push("/");
   };
@@ -81,9 +80,8 @@ export default function CreateReminderPage({ setCallReminders, data }) {
         console.warn(error);
       });
 
+    updateCallReminders();
     setSubmitSuccess(true);
-
-    setCallReminders();
 
     history.push("/");
   };
