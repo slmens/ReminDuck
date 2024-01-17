@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./components/Pages/Home";
@@ -5,13 +6,14 @@ import CreateReminderPage from "./components/Pages/CreateReminderPage";
 import Profile from "./components/Pages/Profile";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import UpdateReminderPage from "./components/Pages/UpdateReminderPage";
 
 function App() {
-  const [callReminders, setCallReminders] = useState([]);
   const [currentDay, setCurrentDay] = useState();
-  const comparedCards = useRef([]);
 
+  const [callReminders, setCallReminders] = useState([]);
+  const filteredReminders = useRef([]);
+
+  // This method fetches the all of the reminders
   const fetchData = async () => {
     await axios
       .get("http://localhost:8080/callReminder")
@@ -19,16 +21,18 @@ function App() {
       .catch((error) => console.log({ error }));
   };
 
+  // This method searchs all the reminders pulled from the backend and adds the ones that have reminders for today to the filteredReminders variable.
   const compareDays = async () => {
     if (!currentDay) {
       return [];
     }
 
-    return callReminders.filter((card) =>
+    filteredReminders.current = callReminders.filter((card) =>
       card.callReminderDays.includes(currentDay)
     );
   };
 
+  // Setting the todays name
   const setToday = async () => {
     const today = new Date();
     const options = { weekday: "long" };
@@ -39,21 +43,17 @@ function App() {
     const fetchDataAndSetToday = async () => {
       await fetchData();
       await setToday();
-      const filteredReminders = await compareDays();
-      comparedCards.current = filteredReminders;
+      await compareDays();
     };
 
     fetchDataAndSetToday();
-
-    // Cleanup code when the component unmounts
-    return () => {
-      // Any cleanup code you want to run when the component unmounts
-    };
   }, [currentDay]);
 
-  function reRender() {
-    setCurrentDay(" ");
-  }
+  const updateCallReminders = async () => {
+    await fetchData();
+    await setToday();
+    await compareDays();
+  };
 
   return (
     <>
@@ -63,13 +63,18 @@ function App() {
             path="/"
             exact
             render={() => (
-              <Home data={comparedCards.current} reRender={reRender} />
+              <Home
+                data={filteredReminders.current}
+                setCallReminders={updateCallReminders}
+              />
             )}
           />
           <Route
             path="/create"
             exact
-            render={() => <CreateReminderPage reRender={reRender} />}
+            render={() => (
+              <CreateReminderPage setCallReminders={updateCallReminders} />
+            )}
           />
           <Route
             path="/profile"
@@ -80,7 +85,10 @@ function App() {
             path="/create/:id"
             exact
             render={() => (
-              <CreateReminderPage data={callReminders} reRender={reRender} />
+              <CreateReminderPage
+                data={callReminders}
+                setCallReminders={updateCallReminders}
+              />
             )}
           />
         </Switch>

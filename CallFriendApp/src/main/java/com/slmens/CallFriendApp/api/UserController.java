@@ -5,6 +5,7 @@ import com.slmens.CallFriendApp.service.concretes.UserManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -22,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User UserFindById(@PathVariable("id") Long id){
+    public User UserFindById(@PathVariable("id") UUID id){
         return this.userManager.findById(id);
     }
 
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean delete(@PathVariable("id") Long id){
+    public Boolean delete(@PathVariable("id") UUID id){
         return this.userManager.delete(id);
     }
 

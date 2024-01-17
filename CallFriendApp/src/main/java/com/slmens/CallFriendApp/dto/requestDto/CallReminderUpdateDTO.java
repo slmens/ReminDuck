@@ -10,11 +10,12 @@ import lombok.Getter;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class CallReminderUpdateDTO {
 
-    private Long id;
+    private UUID id;
 
     private String whoToCall;
 

@@ -10,12 +10,12 @@ import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 
-export default function CreateReminderPage({ reRender, data }) {
+export default function CreateReminderPage({ setCallReminders, data }) {
   const { id } = useParams();
 
   const [values, setValues] = useState({
-    id: "Name",
-    whoToCall: "",
+    id: "",
+    whoToCall: "Name",
     description: "",
     callReminderDays: [],
     callReminderTime: "10:00",
@@ -23,6 +23,7 @@ export default function CreateReminderPage({ reRender, data }) {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const history = useHistory();
 
+  // These 3 methods are for creating checkboxes
   const daysOfWeek = [
     "MONDAY",
     "TUESDAY",
@@ -38,6 +39,7 @@ export default function CreateReminderPage({ reRender, data }) {
     value: day,
   }));
 
+  // Method for handle creating the call reminders
   const handleCreate = (e) => {
     e.preventDefault();
     const reminderToCreate = {
@@ -61,11 +63,12 @@ export default function CreateReminderPage({ reRender, data }) {
 
     setSubmitSuccess(true);
 
-    reRender();
+    setCallReminders();
 
     history.push("/");
   };
 
+  // Method for handle updating the call reminders
   const handleUpdate = (e) => {
     e.preventDefault();
 
@@ -80,24 +83,9 @@ export default function CreateReminderPage({ reRender, data }) {
 
     setSubmitSuccess(true);
 
-    reRender();
+    setCallReminders();
 
     history.push("/");
-  };
-
-  const fetchData = async () => {
-    await axios
-      .get(`http://localhost:8080/callReminder/${id}`)
-      .then((response) =>
-        setValues({
-          id: `${response.data.id}`,
-          whoToCall: `${response.data.whoToCall}`,
-          description: `${response.data.description}`,
-          callReminderDays: response.data.callReminderDays,
-          callReminderTime: `${response.data.callReminderTime}`,
-        })
-      )
-      .catch((error) => console.log({ error }));
   };
 
   useEffect(() => {
@@ -115,6 +103,7 @@ export default function CreateReminderPage({ reRender, data }) {
       }
     }
 
+    /*
     if (submitSuccess) {
       const timeoutId = setTimeout(() => {
         setValues({
@@ -129,9 +118,10 @@ export default function CreateReminderPage({ reRender, data }) {
 
       // Cleanup the timeout to prevent memory leaks
       return () => clearTimeout(timeoutId);
-    }
+    } */
   }, [id, data, submitSuccess]);
 
+  // If id is undefined then it means we are on create / if id is not undefined we are on update
   const onChange = (e) => {
     const { name, type, checked, value } = e.target;
     if (id === undefined) {
@@ -202,7 +192,7 @@ export default function CreateReminderPage({ reRender, data }) {
                 required={true}
                 value={values.whoToCall}
                 onChange={onChange}
-                maxLength={60}
+                maxLength={40}
                 className="w-60 h-14 rounded border-2 border-primary-color p-2"
               />
             </div>
@@ -225,9 +215,7 @@ export default function CreateReminderPage({ reRender, data }) {
               />
             </div>
             <div id="checkboxDiv" className="mt-5 mb-5">
-              <label className="text-1xl font-bold">
-                Days to Call Reminder
-              </label>
+              <h3>Days to Call Reminder</h3>
               {checkboxes}
             </div>
 

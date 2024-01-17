@@ -6,6 +6,7 @@ import com.slmens.CallFriendApp.service.abstracts.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserManager implements IUserService {
@@ -22,7 +23,7 @@ public class UserManager implements IUserService {
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(UUID id) {
         return null;
     }
 
@@ -37,7 +38,7 @@ public class UserManager implements IUserService {
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Boolean delete(UUID id) {
         return null;
     }
 }

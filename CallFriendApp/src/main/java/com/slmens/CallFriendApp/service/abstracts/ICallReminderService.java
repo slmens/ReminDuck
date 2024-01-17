@@ -7,11 +7,12 @@ import com.slmens.CallFriendApp.entities.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ICallReminderService {
     List<CallReminder> findAll();
-    Optional<CallReminder> findById(Long id);
+    Optional<CallReminder> findById(UUID id);
     Boolean save(CallReminderSaveDTO callReminderSaveDTO);
     Boolean update(CallReminderUpdateDTO callReminderUpdateDTO);
-    Boolean delete(Long id);
+    Boolean delete(UUID id);
 }

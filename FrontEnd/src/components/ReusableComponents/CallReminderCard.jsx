@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import UpdateReminderPage from "../Pages/UpdateReminderPage";
 
 export default function CallReminderCard(props) {
   const [showDropdown, setShowDropdown] = useState(false);

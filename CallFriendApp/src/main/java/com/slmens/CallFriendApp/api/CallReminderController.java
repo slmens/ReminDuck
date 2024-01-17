@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -27,7 +28,7 @@ public class CallReminderController {
     }
 
     @GetMapping("/{id}")
-    public Optional<CallReminder> CallReminderFindById(@PathVariable("id") Long id){
+    public Optional<CallReminder> CallReminderFindById(@PathVariable("id") UUID id){
         return this.callReminderManager.findById(id);
     }
 
@@ -42,7 +43,7 @@ public class CallReminderController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean delete(@PathVariable("id") Long id){
+    public Boolean delete(@PathVariable("id") UUID id){
         return this.callReminderManager.delete(id);
     }
 }

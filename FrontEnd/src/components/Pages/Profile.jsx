@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../NavBarComponents/Navbar";
 import Card from "../ReusableComponents/CallReminderCard";
-import axios from "axios";
 
 export default function Profile({ data }) {
   return (

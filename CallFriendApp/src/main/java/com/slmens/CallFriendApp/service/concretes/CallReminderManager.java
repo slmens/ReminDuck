@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 // update hallet string localtime falan
 
@@ -32,7 +33,7 @@ public class CallReminderManager implements ICallReminderService {
     }
 
     @Override
-    public Optional<CallReminder> findById(Long id) {
+    public Optional<CallReminder> findById(UUID id) {
         return this.callReminderRepository.findById(id);
     }
 
@@ -83,7 +84,7 @@ public class CallReminderManager implements ICallReminderService {
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Boolean delete(UUID id) {
         if (this.callReminderRepository.existsById(id)){
             try {
 
