@@ -24,13 +24,17 @@ public class User {
     private UUID id;
 
     @NotBlank
-    @Column(name = "name")
-    private String name;
+    @Column(name = "name",unique = true)
+    private String userName;
 
     @NotBlank
     @Email
     @Column(name = "mail")
     private String mail;
+
+    @NotBlank
+    @Column(name = "password")
+    private String password;
 
     /*@JsonIgnoreProperties(value = {"user"})
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
