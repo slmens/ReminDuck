@@ -55,11 +55,11 @@ export default function CreateReminderPage({ data, setUpdate }) {
     })
       .then(() => {
         console.log("Reminder created");
-        setUpdate(false);
       })
       .catch((error) => {
         console.error("Error creating reminder:", error);
-      });
+      })
+      .finally(setUpdate(false));
 
     setSubmitSuccess(true);
 

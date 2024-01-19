@@ -20,9 +20,9 @@ function App() {
       .get("http://localhost:8080/callReminder")
       .then((response) => {
         setCallReminders(response.data);
-        setUpdate(true);
       })
-      .catch((error) => console.log({ error }));
+      .catch((error) => console.log({ error }))
+      .finally(setUpdate(true));
   };
 
   // This method searchs all the reminders pulled from the backend and adds the ones that have reminders for today to the filteredReminders variable.
