@@ -18,10 +18,11 @@ function App() {
   const fetchData = async () => {
     await axios
       .get("http://localhost:8080/callReminder")
-      .then((response) => setCallReminders(response.data))
+      .then((response) => {
+        setCallReminders(response.data);
+        setUpdate(true);
+      })
       .catch((error) => console.log({ error }));
-
-    setUpdate(!update);
   };
 
   // This method searchs all the reminders pulled from the backend and adds the ones that have reminders for today to the filteredReminders variable.
@@ -65,22 +66,12 @@ function App() {
           <Route
             path="/"
             exact
-            render={() => (
-              <Home
-                data={filteredReminders.current}
-                updateCallReminders={updateCallReminders}
-              />
-            )}
+            render={() => <Home data={filteredReminders.current} />}
           />
           <Route
             path="/create"
             exact
-            render={() => (
-              <CreateReminderPage
-                updateCallReminders={updateCallReminders}
-                setUpdate={() => setUpdate}
-              />
-            )}
+            render={() => <CreateReminderPage setUpdate={() => setUpdate} />}
           />
           <Route
             path="/profile"
@@ -90,12 +81,7 @@ function App() {
           <Route
             path="/create/:id"
             exact
-            render={() => (
-              <CreateReminderPage
-                data={callReminders}
-                updateCallReminders={updateCallReminders}
-              />
-            )}
+            render={() => <CreateReminderPage data={callReminders} />}
           />
         </Switch>
       </BrowserRouter>
