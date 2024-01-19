@@ -9,11 +9,7 @@ import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
 import NavBar from "../NavBarComponents/Navbar";
 
-export default function CreateReminderPage({
-  updateCallReminders,
-  data,
-  setUpdate,
-}) {
+export default function CreateReminderPage({ data, setUpdate }) {
   const { id } = useParams();
 
   const [values, setValues] = useState({
@@ -64,9 +60,8 @@ export default function CreateReminderPage({
         console.error("Error creating reminder:", error);
       });
 
-    updateCallReminders();
     setUpdate(false);
-    setSubmitSuccess(true);
+    //setSubmitSuccess(true);
 
     history.push("/");
   };
@@ -84,8 +79,8 @@ export default function CreateReminderPage({
         console.warn(error);
       });
 
-    updateCallReminders();
-    setSubmitSuccess(true);
+    setUpdate(false);
+    //setSubmitSuccess(true);
 
     history.push("/");
   };

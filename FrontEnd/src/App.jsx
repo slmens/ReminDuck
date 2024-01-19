@@ -21,7 +21,7 @@ function App() {
       .then((response) => setCallReminders(response.data))
       .catch((error) => console.log({ error }));
 
-    setUpdate(!update);
+    setUpdate(true);
   };
 
   // This method searchs all the reminders pulled from the backend and adds the ones that have reminders for today to the filteredReminders variable.
@@ -50,13 +50,8 @@ function App() {
     };
 
     fetchDataAndSetToday();
+    console.log("a");
   }, [update]);
-
-  const updateCallReminders = async () => {
-    await fetchData();
-    await setToday();
-    await compareDays();
-  };
 
   return (
     <>
@@ -65,22 +60,12 @@ function App() {
           <Route
             path="/"
             exact
-            render={() => (
-              <Home
-                data={filteredReminders.current}
-                updateCallReminders={updateCallReminders}
-              />
-            )}
+            render={() => <Home data={filteredReminders.current} />}
           />
           <Route
             path="/create"
             exact
-            render={() => (
-              <CreateReminderPage
-                updateCallReminders={updateCallReminders}
-                setUpdate={() => setUpdate}
-              />
-            )}
+            render={() => <CreateReminderPage setUpdate={() => setUpdate} />}
           />
           <Route
             path="/profile"
@@ -93,7 +78,7 @@ function App() {
             render={() => (
               <CreateReminderPage
                 data={callReminders}
-                updateCallReminders={updateCallReminders}
+                setUpdate={() => setUpdate}
               />
             )}
           />

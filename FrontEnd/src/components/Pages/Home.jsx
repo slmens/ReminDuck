@@ -5,7 +5,7 @@ import React from "react";
 import NavBar from "../NavBarComponents/Navbar";
 import Card from "../ReusableComponents/CallReminderCard";
 
-export default function Home({ data, updateCallReminders }) {
+export default function Home({ data }) {
   return (
     <div className="h-screen min-h-full bg-black">
       <NavBar />
