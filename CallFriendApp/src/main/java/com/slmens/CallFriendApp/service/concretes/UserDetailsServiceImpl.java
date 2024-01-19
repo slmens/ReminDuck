@@ -1,5 +1,5 @@
 package com.slmens.CallFriendApp.service.concretes;
-
+/*
 import com.slmens.CallFriendApp.dao.UserRepository;
 import com.slmens.CallFriendApp.entities.User;
 import com.slmens.CallFriendApp.security.JwtUserDetails;
@@ -33,3 +33,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return null;
     }
 }
+*/

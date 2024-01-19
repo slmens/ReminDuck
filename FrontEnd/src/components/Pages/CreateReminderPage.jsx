@@ -1,16 +1,19 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { useState, useEffect } from "react";
-import NavBar from "../NavBarComponents/Navbar";
-import TimePicker from "react-time-picker";
-import "react-time-picker/dist/TimePicker.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "react-clock/dist/Clock.css";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import axios from "axios";
+import TimePicker from "react-time-picker";
+import "react-time-picker/dist/TimePicker.css";
+import NavBar from "../NavBarComponents/Navbar";
 
-export default function CreateReminderPage({ updateCallReminders, data }) {
+export default function CreateReminderPage({
+  updateCallReminders,
+  data,
+  setUpdate,
+}) {
   const { id } = useParams();
 
   const [values, setValues] = useState({
@@ -62,6 +65,7 @@ export default function CreateReminderPage({ updateCallReminders, data }) {
       });
 
     updateCallReminders();
+    setUpdate(false);
     setSubmitSuccess(true);
 
     history.push("/");

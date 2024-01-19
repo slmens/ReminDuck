@@ -1,5 +1,5 @@
 package com.slmens.CallFriendApp.security;
-
+/*
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,3 +15,4 @@ public class JwtAuthenticationEntryPoint  implements AuthenticationEntryPoint {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED,authException.getMessage());
     }
 }
+*/

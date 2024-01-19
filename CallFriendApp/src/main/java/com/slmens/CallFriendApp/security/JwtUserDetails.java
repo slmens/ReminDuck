@@ -1,5 +1,5 @@
 package com.slmens.CallFriendApp.security;
-
+/*
 import com.slmens.CallFriendApp.entities.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,3 +59,4 @@ public class JwtUserDetails implements UserDetails {
         return true;
     }
 }
+*/

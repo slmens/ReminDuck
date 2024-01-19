@@ -1,17 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Home from "./components/Pages/Home";
-import CreateReminderPage from "./components/Pages/CreateReminderPage";
-import Profile from "./components/Pages/Profile";
-import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import CreateReminderPage from "./components/Pages/CreateReminderPage";
+import Home from "./components/Pages/Home";
+import Profile from "./components/Pages/Profile";
 
 function App() {
   const [currentDay, setCurrentDay] = useState();
 
   const [callReminders, setCallReminders] = useState([]);
   const filteredReminders = useRef([]);
+  const [update, setUpdate] = useState(false);
 
   // This method fetches the all of the reminders
   const fetchData = async () => {
@@ -19,6 +20,8 @@ function App() {
       .get("http://localhost:8080/callReminder")
       .then((response) => setCallReminders(response.data))
       .catch((error) => console.log({ error }));
+
+    setUpdate(!update);
   };
 
   // This method searchs all the reminders pulled from the backend and adds the ones that have reminders for today to the filteredReminders variable.
@@ -47,7 +50,7 @@ function App() {
     };
 
     fetchDataAndSetToday();
-  }, [currentDay]);
+  }, [update]);
 
   const updateCallReminders = async () => {
     await fetchData();
@@ -73,7 +76,10 @@ function App() {
             path="/create"
             exact
             render={() => (
-              <CreateReminderPage updateCallReminders={updateCallReminders} />
+              <CreateReminderPage
+                updateCallReminders={updateCallReminders}
+                setUpdate={() => setUpdate}
+              />
             )}
           />
           <Route

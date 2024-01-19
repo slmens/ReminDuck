@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from "react";
-import Card from "../ReusableComponents/CallReminderCard";
+import React from "react";
 import NavBar from "../NavBarComponents/Navbar";
+import Card from "../ReusableComponents/CallReminderCard";
 
 export default function Home({ data, updateCallReminders }) {
   return (

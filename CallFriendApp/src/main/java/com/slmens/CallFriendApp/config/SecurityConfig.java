@@ -1,5 +1,7 @@
 package com.slmens.CallFriendApp.config;
 
+
+/*
 import com.slmens.CallFriendApp.security.JwtAuthenticationEntryPoint;
 import com.slmens.CallFriendApp.security.JwtAuthenticationFilter;
 import com.slmens.CallFriendApp.service.concretes.UserDetailsServiceImpl;
@@ -31,6 +33,8 @@ public class SecurityConfig{
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception{
-        return AuthenticationManagerBean();
+       // return AuthenticationManagerBean();
+        return null;
     }
 }
+*/

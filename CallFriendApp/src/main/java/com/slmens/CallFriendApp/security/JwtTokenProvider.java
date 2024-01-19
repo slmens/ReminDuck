@@ -1,5 +1,5 @@
 package com.slmens.CallFriendApp.security;
-
+/*
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -50,3 +50,4 @@ public class JwtTokenProvider {
 
     }
 }
+*/
