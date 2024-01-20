@@ -65,6 +65,7 @@ function App() {
             path="/"
             exact
             render={() => <Home data={filteredReminders.current} />}
+            render={() => <Home data={filteredReminders.current} />}
           />
           <Route
             path="/create"
