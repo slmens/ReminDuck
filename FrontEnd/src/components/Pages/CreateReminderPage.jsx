@@ -48,7 +48,7 @@ export default function CreateReminderPage({ data, setUpdate }) {
       callReminderTime: values.callReminderTime,
     };
 
-    fetch(`http://localhost:8080/callReminder/save`, {
+    fetch(`http://localhost:8080/callReminder`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reminderToCreate),
@@ -56,11 +56,14 @@ export default function CreateReminderPage({ data, setUpdate }) {
       .then(() => {
         console.log("Reminder created");
       })
+      .then(() => {
+        setUpdate(false);
+      })
       .catch((error) => {
         console.error("Error creating reminder:", error);
-      });
+      })
+      .finally();
 
-    setUpdate(false);
     //setSubmitSuccess(true);
 
     history.push("/");

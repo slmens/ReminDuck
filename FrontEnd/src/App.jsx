@@ -18,10 +18,14 @@ function App() {
   const fetchData = async () => {
     await axios
       .get("http://localhost:8080/callReminder")
-      .then((response) => setCallReminders(response.data))
-      .catch((error) => console.log({ error }));
-
-    setUpdate(true);
+      .then((response) => {
+        setCallReminders(response.data);
+      })
+      .then(() => {
+        setUpdate(true);
+      })
+      .catch((error) => console.log({ error }))
+      .finally();
   };
 
   // This method searchs all the reminders pulled from the backend and adds the ones that have reminders for today to the filteredReminders variable.
@@ -65,7 +69,7 @@ function App() {
           <Route
             path="/create"
             exact
-            render={() => <CreateReminderPage setUpdate={() => setUpdate} />}
+            render={() => <CreateReminderPage setUpdate={setUpdate} />}
           />
           <Route
             path="/profile"

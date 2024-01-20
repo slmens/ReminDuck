@@ -32,7 +32,7 @@ public class CallReminderController {
         return this.callReminderManager.findById(id);
     }
 
-    @PostMapping("/save")
+    @PostMapping("")
     public Boolean save(@RequestBody CallReminderSaveDTO callReminderSaveDTO){
         return this.callReminderManager.save(callReminderSaveDTO);
     }
