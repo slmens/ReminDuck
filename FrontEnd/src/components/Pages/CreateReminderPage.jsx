@@ -10,7 +10,6 @@ import "react-time-picker/dist/TimePicker.css";
 import NavBar from "../NavBarComponents/Navbar";
 
 export default function CreateReminderPage({ data, setUpdate }) {
-export default function CreateReminderPage({ data, setUpdate }) {
   const { id } = useParams();
 
   const [values, setValues] = useState({
