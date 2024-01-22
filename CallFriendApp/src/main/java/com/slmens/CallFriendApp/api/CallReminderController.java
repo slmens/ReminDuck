@@ -28,11 +28,16 @@ public class CallReminderController {
     }
 
     @GetMapping("/{id}")
-    public Optional<CallReminder> CallReminderFindById(@PathVariable("id") UUID id){
+    public Optional<CallReminder> callReminderFindById(@PathVariable("id") UUID id){
         return this.callReminderManager.findById(id);
     }
 
-    @PostMapping("")
+    @GetMapping("/byUser/{id}")
+    public List<CallReminder> findAllByUserId(@PathVariable("id") UUID id){
+        return this.callReminderManager.findAllByUserId(id);
+    }
+
+    @PostMapping("/save")
     public Boolean save(@RequestBody CallReminderSaveDTO callReminderSaveDTO){
         return this.callReminderManager.save(callReminderSaveDTO);
     }

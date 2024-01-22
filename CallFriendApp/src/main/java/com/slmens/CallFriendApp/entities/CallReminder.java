@@ -42,7 +42,7 @@ public class CallReminder {
     @Column(name = "callReminderDays")
     private List<String> callReminderDays;
 
-    /* @JsonIgnoreProperties(value = {"callsToRemind"})
+    @JsonIgnoreProperties(value = {"callsToRemind"})
     @ManyToOne()
-    private User user; */
+    private User user;
 }

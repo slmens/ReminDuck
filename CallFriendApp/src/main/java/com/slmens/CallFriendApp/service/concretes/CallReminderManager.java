@@ -38,6 +38,11 @@ public class CallReminderManager implements ICallReminderService {
     }
 
     @Override
+    public List<CallReminder> findAllByUserId(UUID id) {
+        return this.callReminderRepository.findAllByUserId(id);
+    }
+
+    @Override
     public Boolean save(CallReminderSaveDTO callReminderSaveDTO) {
 
         CallReminder callReminderToSave = new CallReminder();

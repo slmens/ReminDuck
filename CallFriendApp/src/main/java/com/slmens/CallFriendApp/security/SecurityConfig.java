@@ -3,6 +3,7 @@ package com.slmens.CallFriendApp.security;
 import com.slmens.CallFriendApp.service.concretes.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -39,11 +40,17 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
-                        x.requestMatchers("/auth/welcome/**", "/auth/addNewUser/**", "/auth/generateToken/**").permitAll()
+                        x.requestMatchers("user/save").permitAll()
+                                .requestMatchers("user/welcome").permitAll()
+                                .requestMatchers(HttpMethod.POST,"user/generateToken").permitAll()
+
                 )
                 .authorizeHttpRequests(x ->
-                        x.requestMatchers("/auth/user").authenticated()
-                                .requestMatchers("/auth/admin").hasRole("ADMIN")
+                        x.requestMatchers(HttpMethod.POST,"/callReminder/save").authenticated()
+                                .requestMatchers(HttpMethod.GET,"/callReminder/byUser/{id}").authenticated()
+                                .requestMatchers(HttpMethod.PUT,"/callReminder/{id}").authenticated()
+                                .requestMatchers(HttpMethod.DELETE,"/callReminder/{id}").authenticated()
+                                .anyRequest().hasRole("ADMIN")
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

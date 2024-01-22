@@ -23,7 +23,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID user_id;
+    private UUID id;
 
     @NotBlank
     @Column(name = "name",unique = true)
@@ -33,7 +33,6 @@ public class User implements UserDetails {
     @Email
     @Column(name = "mail")
     private String mail;
-
 
     @NotBlank
     @Column(name = "password")
@@ -51,13 +50,13 @@ public class User implements UserDetails {
     }
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Set<Role> authorities;
 
-    /*@JsonIgnoreProperties(value = {"user"})
+    @JsonIgnoreProperties(value = {"user"})
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     @Column(name = "callsToRemind")
-    private List<CallReminder> callsToRemind;*/
+    private List<CallReminder> callsToRemind;
 }

@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface ICallReminderService {
     List<CallReminder> findAll();
     Optional<CallReminder> findById(UUID id);
+    List<CallReminder> findAllByUserId(UUID id);
     Boolean save(CallReminderSaveDTO callReminderSaveDTO);
     Boolean update(CallReminderUpdateDTO callReminderUpdateDTO);
     Boolean delete(UUID id);
