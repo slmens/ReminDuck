@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private UUID id;
 
     @NotBlank
-    @Column(name = "name",unique = true)
+    @Column(name = "username",unique = true)
     private String username;
 
     @NotBlank
@@ -38,7 +38,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @NotBlank
+    @NotNull
     @Column(name = "role")
     private Role role;
 
@@ -53,7 +53,7 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority((role.getAuthority())));
     }
 
-    /*
+     /*
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "role", nullable = false)

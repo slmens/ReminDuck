@@ -1,5 +1,6 @@
 package com.slmens.CallFriendApp.service.concretes;
 
+import com.slmens.CallFriendApp.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class JwtService {
+public class JwtService{
 
     @Value("${reminduck.app.secret}")
     private String SECRET;
@@ -57,7 +58,7 @@ public class JwtService {
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Integer.parseInt(EXPIRY)))
-                .signWith(SignatureAlgorithm.HS512, getSignKey())
+                .signWith(getSignKey(),SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -67,5 +68,13 @@ public class JwtService {
     }
 
 
-
+    public String generateRefreshToken(Map<String, Object> extraClaims, UserDetails user) {
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + Integer.parseInt(EXPIRY) + Integer.parseInt(EXPIRY)))
+                .signWith(getSignKey(),SignatureAlgorithm.HS256)
+                .compact();
+    }
 }

@@ -1,5 +1,6 @@
 package com.slmens.CallFriendApp.security;
 
+import com.slmens.CallFriendApp.service.abstracts.IUserService;
 import com.slmens.CallFriendApp.service.concretes.JwtService;
 import com.slmens.CallFriendApp.service.concretes.UserService;
 import jakarta.servlet.FilterChain;
@@ -11,21 +12,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserService userService;
 
-    public JwtAuthFilter(JwtService jwtService, UserService userService) {
+    private final UserDetailsService userService;
+
+    public JwtAuthFilter(JwtService jwtService, UserDetailsService userService) {
         this.jwtService = jwtService;
         this.userService = userService;
     }

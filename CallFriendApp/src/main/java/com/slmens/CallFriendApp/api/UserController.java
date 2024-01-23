@@ -2,7 +2,10 @@ package com.slmens.CallFriendApp.api;
 
 import com.slmens.CallFriendApp.dto.requestDto.AuthRequest;
 import com.slmens.CallFriendApp.dto.requestDto.CreateUserRequest;
+import com.slmens.CallFriendApp.dto.requestDto.SigninRequest;
+import com.slmens.CallFriendApp.dto.responseDto.JwtAuthenticationResponse;
 import com.slmens.CallFriendApp.dto.responseDto.UserResponseDto;
+import com.slmens.CallFriendApp.service.concretes.AuthenticationService;
 import com.slmens.CallFriendApp.service.concretes.JwtService;
 import com.slmens.CallFriendApp.service.concretes.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.service.annotation.DeleteExchange;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,13 +26,16 @@ public class UserController {
 
     private final UserService service;
 
+    private final AuthenticationService authenticationService;
+
     private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
 
 
-    public UserController(UserService service, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public UserController(UserService service, AuthenticationService authenticationService, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.service = service;
+        this.authenticationService = authenticationService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
@@ -51,10 +56,16 @@ public class UserController {
     }
 
 
-    @PostMapping("/save")
+    @PostMapping("/signUp")
     public Boolean addUser(@RequestBody CreateUserRequest request) {
-        return service.createUser(request);
+        return authenticationService.createUser(request);
     }
+
+    @PostMapping("/signIn")
+    public JwtAuthenticationResponse signIn(@RequestBody SigninRequest signinRequest){
+        return authenticationService.signIn(signinRequest);
+    }
+
 
     @PostMapping("/generateToken")
     public String generateToken(@RequestBody AuthRequest request) {

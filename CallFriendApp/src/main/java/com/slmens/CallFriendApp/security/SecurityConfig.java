@@ -1,5 +1,7 @@
 package com.slmens.CallFriendApp.security;
 
+import com.slmens.CallFriendApp.entities.Role;
+import com.slmens.CallFriendApp.service.abstracts.IUserService;
 import com.slmens.CallFriendApp.service.concretes.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,12 +27,12 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
 
-    private final UserService userService;
+    private final UserDetailsService userService;
 
     private final PasswordEncoder passwordEncoder;
 
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsService userService, PasswordEncoder passwordEncoder) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -40,17 +43,17 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
-                        x.requestMatchers("user/save").permitAll()
-                                .requestMatchers("user/welcome").permitAll()
-                                .requestMatchers(HttpMethod.POST,"user/generateToken").permitAll()
+                        x.requestMatchers("user/welcome/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/user/signIn").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/user/signUp").permitAll()
 
                 )
                 .authorizeHttpRequests(x ->
-                        x.requestMatchers(HttpMethod.POST,"/callReminder/save").authenticated()
-                                .requestMatchers(HttpMethod.GET,"/callReminder/byUser/{id}").authenticated()
+                        x.requestMatchers(HttpMethod.GET,"/callReminder/byUser/{id}").authenticated()
                                 .requestMatchers(HttpMethod.PUT,"/callReminder/{id}").authenticated()
                                 .requestMatchers(HttpMethod.DELETE,"/callReminder/{id}").authenticated()
-                                .anyRequest().hasRole("ADMIN")
+                                //.requestMatchers(HttpMethod.POST,"user/generateToken").authenticated()
+                                .anyRequest().hasAnyAuthority(Role.ROLE_ADMIN.getAuthority())
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
