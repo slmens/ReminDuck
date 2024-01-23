@@ -2,16 +2,23 @@ package com.slmens.CallFriendApp.service.concretes;
 
 import com.slmens.CallFriendApp.dao.UserRepository;
 import com.slmens.CallFriendApp.dto.requestDto.CreateUserRequest;
+import com.slmens.CallFriendApp.dto.requestDto.SigninRequest;
+import com.slmens.CallFriendApp.dto.responseDto.JwtAuthenticationResponse;
 import com.slmens.CallFriendApp.dto.responseDto.UserResponseDto;
+import com.slmens.CallFriendApp.entities.Role;
 import com.slmens.CallFriendApp.entities.User;
+import com.slmens.CallFriendApp.security.JwtAuthFilter;
 import com.slmens.CallFriendApp.service.abstracts.IUserService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,11 +27,9 @@ import java.util.UUID;
 public class UserService implements UserDetailsService, IUserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     // UserDetailsService Methods
@@ -38,25 +43,6 @@ public class UserService implements UserDetailsService, IUserService {
 
     public Optional<User> getByUsername(String username) {
         return userRepository.findByUsername(username);
-    }
-
-    public Boolean createUser(CreateUserRequest request) {
-        User newUser = User.builder()
-                .username(request.username())
-                .password(passwordEncoder.encode(request.password()))
-                .mail(request.mail())
-                .role(request.role())
-                .accountNonExpired(true)
-                .credentialsNonExpired(true)
-                .isEnabled(true)
-                .accountNonLocked(true)
-                .build();
-
-        User user = userRepository.save(newUser);
-        if (this.userRepository.existsById(user.getId())){
-            return true;
-        }
-        return false;
     }
 
     // IUserService Methods
@@ -96,4 +82,5 @@ public class UserService implements UserDetailsService, IUserService {
     public Boolean delete(UUID id) {
         return null;
     }
+
 }
