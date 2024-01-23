@@ -2,10 +2,11 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import CreateReminderPage from "./components/Pages/CreateReminderPage";
 import Home from "./components/Pages/Home";
 import Profile from "./components/Pages/Profile";
+import Auth from "./components/Auth/Auth";
 
 function App() {
   const [currentDay, setCurrentDay] = useState();
@@ -13,6 +14,7 @@ function App() {
   const [callReminders, setCallReminders] = useState([]);
   const filteredReminders = useRef([]);
   const [update, setUpdate] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // This method fetches the all of the reminders
   const fetchData = async () => {
@@ -64,27 +66,54 @@ function App() {
           <Route
             path="/"
             exact
-            render={() => <Home data={filteredReminders.current} />}
+            render={() => <Auth setIsLoggedIn={setIsLoggedIn} />}
+          />
+          <Route
+            path="/home"
+            exact
+            render={() =>
+              isLoggedIn ? (
+                <Home data={filteredReminders.current} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
           />
           <Route
             path="/create"
             exact
-            render={() => <CreateReminderPage setUpdate={setUpdate} />}
+            render={() =>
+              isLoggedIn ? (
+                <CreateReminderPage setUpdate={setUpdate} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
           />
           <Route
             path="/profile"
             exact
-            render={() => <Profile data={callReminders} />}
+            render={() =>
+              isLoggedIn ? (
+                <Profile data={callReminders} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
           />
           <Route
             path="/create/:id"
             exact
-            render={() => (
-              <CreateReminderPage
-                data={callReminders}
-                setUpdate={() => setUpdate}
-              />
-            )}
+            render={() =>
+              isLoggedIn ? (
+                <CreateReminderPage
+                  data={callReminders}
+                  setUpdate={setUpdate}
+                />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
           />
         </Switch>
       </BrowserRouter>

@@ -2,11 +2,14 @@ package com.slmens.CallFriendApp.service.concretes;
 
 import com.slmens.CallFriendApp.dao.UserRepository;
 import com.slmens.CallFriendApp.dto.requestDto.CreateUserRequest;
+import com.slmens.CallFriendApp.dto.requestDto.RefreshTokenRequest;
 import com.slmens.CallFriendApp.dto.requestDto.SigninRequest;
 import com.slmens.CallFriendApp.dto.responseDto.JwtAuthenticationResponse;
 import com.slmens.CallFriendApp.entities.Role;
 import com.slmens.CallFriendApp.entities.User;
 import com.slmens.CallFriendApp.service.abstracts.IAuthenticationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +38,10 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
 
-    public Boolean createUser(CreateUserRequest request) {
+    public ResponseEntity<String> createUser(CreateUserRequest request) {
+        if (userRepository.existsByUserName(request.username())){
+            return new ResponseEntity<>("Username already in use!", HttpStatus.BAD_REQUEST);
+        }
         User newUser = User.builder()
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
@@ -49,9 +55,10 @@ public class AuthenticationService implements IAuthenticationService {
 
         User user = userRepository.save(newUser);
         if (this.userRepository.existsById(user.getId())){
-            return true;
+            return new ResponseEntity<>("User created!", HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>("Couldn't create the user!", HttpStatus.NOT_FOUND);
         }
-        return false;
     }
 
     public JwtAuthenticationResponse signIn(SigninRequest signInRequest){
@@ -63,8 +70,22 @@ public class AuthenticationService implements IAuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(),user);
 
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-        jwtAuthenticationResponse.setToken(jwt);
+        jwtAuthenticationResponse.setToken("Bearer " + jwt);
         jwtAuthenticationResponse.setRefreshToken(refreshToken);
         return jwtAuthenticationResponse;
+    }
+
+    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+        String userName = jwtService.extractUser(refreshTokenRequest.getToken());
+        User user = userRepository.findByUsername(userName).orElseThrow();
+        if (jwtService.validateToken(refreshTokenRequest.getToken(),user)){
+            var jwt = jwtService.generateToken(user.getUsername());
+
+            JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+            jwtAuthenticationResponse.setToken("Bearer " + jwt);
+            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+            return jwtAuthenticationResponse;
+        }
+        return null;
     }
 }

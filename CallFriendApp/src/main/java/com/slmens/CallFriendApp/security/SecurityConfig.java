@@ -43,13 +43,13 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
-                        x.requestMatchers("user/welcome/**").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/user/signIn").permitAll()
+                        x.requestMatchers(HttpMethod.POST,"/user/signIn").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/user/signUp").permitAll()
 
                 )
                 .authorizeHttpRequests(x ->
                         x.requestMatchers(HttpMethod.GET,"/callReminder/byUser/{id}").authenticated()
+                                .requestMatchers(HttpMethod.POST,"user/refresh").authenticated()
                                 .requestMatchers(HttpMethod.PUT,"/callReminder/{id}").authenticated()
                                 .requestMatchers(HttpMethod.DELETE,"/callReminder/{id}").authenticated()
                                 //.requestMatchers(HttpMethod.POST,"user/generateToken").authenticated()

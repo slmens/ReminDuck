@@ -2,6 +2,7 @@ package com.slmens.CallFriendApp.api;
 
 import com.slmens.CallFriendApp.dto.requestDto.AuthRequest;
 import com.slmens.CallFriendApp.dto.requestDto.CreateUserRequest;
+import com.slmens.CallFriendApp.dto.requestDto.RefreshTokenRequest;
 import com.slmens.CallFriendApp.dto.requestDto.SigninRequest;
 import com.slmens.CallFriendApp.dto.responseDto.JwtAuthenticationResponse;
 import com.slmens.CallFriendApp.dto.responseDto.UserResponseDto;
@@ -9,6 +10,7 @@ import com.slmens.CallFriendApp.service.concretes.AuthenticationService;
 import com.slmens.CallFriendApp.service.concretes.JwtService;
 import com.slmens.CallFriendApp.service.concretes.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,7 +59,8 @@ public class UserController {
 
 
     @PostMapping("/signUp")
-    public Boolean addUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity
+            <String> addUser(@RequestBody CreateUserRequest request) {
         return authenticationService.createUser(request);
     }
 
@@ -66,7 +69,12 @@ public class UserController {
         return authenticationService.signIn(signinRequest);
     }
 
+    @PostMapping("/refresh")
+    public JwtAuthenticationResponse signIn(@RequestBody RefreshTokenRequest refreshTokenRequest){
+        return authenticationService.refreshToken(refreshTokenRequest);
+    }
 
+    /*
     @PostMapping("/generateToken")
     public String generateToken(@RequestBody AuthRequest request) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
@@ -75,7 +83,7 @@ public class UserController {
         }
         log.info("invalid username " + request.username());
         throw new UsernameNotFoundException("invalid username {} " + request.username());
-    }
+    }*/
 
     @PutMapping("/")
     public String getUserString() {
