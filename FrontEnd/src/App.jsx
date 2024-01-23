@@ -55,7 +55,7 @@ function App() {
       await compareDays();
     };
 
-    fetchDataAndSetToday();
+    //fetchDataAndSetToday();
     console.log("a");
   }, [update]);
 

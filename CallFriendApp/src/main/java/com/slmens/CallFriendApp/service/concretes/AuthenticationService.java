@@ -39,13 +39,14 @@ public class AuthenticationService implements IAuthenticationService {
 
 
     public ResponseEntity<String> createUser(CreateUserRequest request) {
-        if (userRepository.existsByUserName(request.username())){
+        if (userRepository.existsByusername(request.getUsername())){
             return new ResponseEntity<>("Username already in use!", HttpStatus.BAD_REQUEST);
         }
+        System.out.println("Received password: " + request.getPassword());
         User newUser = User.builder()
-                .username(request.username())
-                .password(passwordEncoder.encode(request.password()))
-                .mail(request.mail())
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .mail(request.getMail())
                 .role(Role.ROLE_USER)
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
@@ -70,8 +71,7 @@ public class AuthenticationService implements IAuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(),user);
 
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-        jwtAuthenticationResponse.setToken("Bearer " + jwt);
-        jwtAuthenticationResponse.setRefreshToken(refreshToken);
+        jwtAuthenticationResponse.setId(user.getId());
         return jwtAuthenticationResponse;
     }
 
@@ -82,8 +82,7 @@ public class AuthenticationService implements IAuthenticationService {
             var jwt = jwtService.generateToken(user.getUsername());
 
             JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-            jwtAuthenticationResponse.setToken("Bearer " + jwt);
-            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+            jwtAuthenticationResponse.setId(user.getId());
             return jwtAuthenticationResponse;
         }
         return null;

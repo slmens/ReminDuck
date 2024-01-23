@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173/**")
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -30,21 +30,10 @@ public class UserController {
 
     private final AuthenticationService authenticationService;
 
-    private final JwtService jwtService;
 
-    private final AuthenticationManager authenticationManager;
-
-
-    public UserController(UserService service, AuthenticationService authenticationService, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public UserController(UserService service, AuthenticationService authenticationService) {
         this.service = service;
         this.authenticationService = authenticationService;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-    }
-
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Hello World! this is FOLSDEV";
     }
 
     @GetMapping("/")
@@ -70,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public JwtAuthenticationResponse signIn(@RequestBody RefreshTokenRequest refreshTokenRequest){
+    public JwtAuthenticationResponse refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
         return authenticationService.refreshToken(refreshTokenRequest);
     }
 
