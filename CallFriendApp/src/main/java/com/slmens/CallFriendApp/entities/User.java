@@ -38,6 +38,10 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @NotBlank
+    @Column(name = "role")
+    private Role role;
+
     private boolean accountNonExpired;
     private boolean isEnabled;
     private boolean accountNonLocked;
@@ -46,14 +50,15 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Return a collection of GrantedAuthority based on the user's roles/authorities
-        return Collections.singleton(new SimpleGrantedAuthority(authorities.toString()));
+        return List.of(new SimpleGrantedAuthority((role.getAuthority())));
     }
 
+    /*
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Set<Role> authorities;
+    private Set<Role> authorities; */
 
     @JsonIgnoreProperties(value = {"user"})
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)

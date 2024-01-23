@@ -11,6 +11,6 @@ public record CreateUserRequest(
         String username,
         String password,
         String mail,
-        Set<Role> authorities
+        Role role
 ){
 }

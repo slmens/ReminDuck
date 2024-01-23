@@ -20,6 +20,9 @@ public class JwtService {
     @Value("${reminduck.app.secret}")
     private String SECRET;
 
+    @Value("${reminduck.app.expires.in}")
+    private String EXPIRY;
+
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userName);
@@ -53,7 +56,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2))
+                .setExpiration(new Date(System.currentTimeMillis() + Integer.parseInt(EXPIRY)))
                 .signWith(SignatureAlgorithm.HS512, getSignKey())
                 .compact();
     }
