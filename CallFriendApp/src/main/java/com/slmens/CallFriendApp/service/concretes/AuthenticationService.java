@@ -42,7 +42,6 @@ public class AuthenticationService implements IAuthenticationService {
         if (userRepository.existsByusername(request.getUsername())){
             return new ResponseEntity<>("Username already in use!", HttpStatus.BAD_REQUEST);
         }
-        System.out.println("Received password: " + request.getPassword());
         User newUser = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))

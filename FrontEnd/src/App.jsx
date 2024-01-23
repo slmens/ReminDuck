@@ -15,6 +15,7 @@ function App() {
   const filteredReminders = useRef([]);
   const [update, setUpdate] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState("");
 
   // This method fetches the all of the reminders
   const fetchData = async () => {
@@ -66,7 +67,9 @@ function App() {
           <Route
             path="/"
             exact
-            render={() => <Auth setIsLoggedIn={setIsLoggedIn} />}
+            render={() => (
+              <Auth setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} />
+            )}
           />
           <Route
             path="/home"

@@ -1,13 +1,17 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
-export default function Auth() {
+export default function Auth({ setIsLoggedIn, setUserId }) {
   const [createUserForm, setCreateUserForm] = useState({
     username: "",
     password: "",
     mail: "",
   });
+
+  const history = useHistory();
 
   const [passwordChecker, setPasswordChecker] = useState("");
 
@@ -56,20 +60,34 @@ export default function Auth() {
     event.preventDefault();
     if (actionType === "signUp") {
       axios
-        .post("http://localhost:8080/user/signUp", { createUserForm })
+        .post("http://localhost:8080/user/signUp", createUserForm)
         .then((res) => {
           console.log(res);
         })
-        .then()
-        .catch((e) => {});
+        .then(() => {
+          setCreateUserForm({
+            username: "",
+            password: "",
+            mail: "",
+          });
+          setIsRegister(!isRegister);
+        })
+        .catch((e) => {
+          console.warn(e);
+        });
     } else if (actionType === "signIn") {
       axios
-        .post("http://localhost:8080/user/signIn", { logInUserForm })
+        .post("http://localhost:8080/user/signIn", logInUserForm)
         .then((res) => {
-          console.log(res);
+          if (res.data.id !== "") {
+            setIsLoggedIn(true);
+            setUserId(res.data);
+            history.push("/home");
+          }
         })
-        .then()
-        .catch((e) => {});
+        .catch((e) => {
+          console.warn(e);
+        });
     }
   }
 
@@ -230,7 +248,7 @@ export default function Auth() {
 
   return (
     <div className="w-screen h-screen bg-black flex flex-col justify-center">
-      {isRegister ? registerForm : logInForm}
+      {isRegister ? logInForm : registerForm}
     </div>
   );
 }
