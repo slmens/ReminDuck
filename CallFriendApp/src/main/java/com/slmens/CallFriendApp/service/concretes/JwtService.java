@@ -37,16 +37,18 @@ public class JwtService{
 
     private Date extractExpiration(String token) {
         Claims claims = Jwts
-                .parser()
+                .parserBuilder()
                 .setSigningKey(getSignKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getExpiration();
     }
     public String extractUser(String token) {
         Claims claims = Jwts
-                .parser()
+                .parserBuilder()
                 .setSigningKey(getSignKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();

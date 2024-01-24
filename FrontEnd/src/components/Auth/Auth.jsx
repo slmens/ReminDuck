@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
-export default function Auth({ setIsLoggedIn, setUserId }) {
+export default function Auth({ setIsLoggedIn, setUserId, setJwt }) {
   const [createUserForm, setCreateUserForm] = useState({
     username: "",
     password: "",
@@ -80,8 +80,10 @@ export default function Auth({ setIsLoggedIn, setUserId }) {
         .post("http://localhost:8080/user/signIn", logInUserForm)
         .then((res) => {
           if (res.data.id !== "") {
+            console.log(res.data);
             setIsLoggedIn(true);
-            setUserId(res.data);
+            setUserId(res.data.id);
+            setJwt(res.data.jwt);
             history.push("/home");
           }
         })

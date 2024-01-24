@@ -49,7 +49,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(x ->
                         x.requestMatchers(HttpMethod.GET,"/callReminder/byUser/{id}").authenticated()
-                                .requestMatchers(HttpMethod.POST,"user/refresh").authenticated()
+                                .requestMatchers(HttpMethod.POST,"/callReminder/save").authenticated()
+                                .requestMatchers(HttpMethod.GET,"/user/{id}").authenticated()
+                                .requestMatchers(HttpMethod.POST,"/user/refresh").authenticated()
                                 .requestMatchers(HttpMethod.PUT,"/callReminder/{id}").authenticated()
                                 .requestMatchers(HttpMethod.DELETE,"/callReminder/{id}").authenticated()
                                 //.requestMatchers(HttpMethod.POST,"user/generateToken").authenticated()

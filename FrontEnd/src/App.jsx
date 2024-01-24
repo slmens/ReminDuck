@@ -7,6 +7,7 @@ import CreateReminderPage from "./components/Pages/CreateReminderPage";
 import Home from "./components/Pages/Home";
 import Profile from "./components/Pages/Profile";
 import Auth from "./components/Auth/Auth";
+import { useLocalState } from "./util/useLocalStorage";
 
 function App() {
   const [currentDay, setCurrentDay] = useState();
@@ -15,14 +16,20 @@ function App() {
   const filteredReminders = useRef([]);
   const [update, setUpdate] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useLocalState("", "id");
+  const [jwt, setJwt] = useLocalState("", "auth");
 
   // This method fetches the all of the reminders
-  const fetchData = async () => {
+  const fetchCallReminderDataByUserId = async () => {
     await axios
-      .get("http://localhost:8080/callReminder")
+      .get(`http://localhost:8080/callReminder/byUser/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      })
       .then((response) => {
         setCallReminders(response.data);
+        console.log(response.data);
       })
       .then(() => {
         setUpdate(true);
@@ -30,6 +37,23 @@ function App() {
       .catch((error) => console.log({ error }))
       .finally();
   };
+
+  const fetchUserData = async () => {
+    await axios
+      .get(`http://localhost:8080/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      })
+      .then((res) => {
+        localStorage.setItem("name", res.data.username);
+      })
+      .catch((ex) => {
+        console.log(ex);
+      });
+  };
+
+  // home a girdiğimde bana user id ile hem userı hem de userın call reminderlarını çekmesi lazım
 
   // This method searchs all the reminders pulled from the backend and adds the ones that have reminders for today to the filteredReminders variable.
   const compareDays = async () => {
@@ -49,16 +73,15 @@ function App() {
     setCurrentDay(today.toLocaleDateString("en-US", options).toUpperCase());
   };
 
-  useEffect(() => {
-    const fetchDataAndSetToday = async () => {
-      await fetchData();
-      await setToday();
-      await compareDays();
-    };
+  const fetchDataAndSetToday = async () => {
+    await fetchCallReminderDataByUserId();
+    await setToday();
+    await compareDays();
+  };
 
+  useEffect(() => {
     //fetchDataAndSetToday();
-    console.log("a");
-  }, [update]);
+  }, [update, isLoggedIn]);
 
   return (
     <>
@@ -68,15 +91,23 @@ function App() {
             path="/"
             exact
             render={() => (
-              <Auth setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} />
+              <Auth
+                setIsLoggedIn={setIsLoggedIn}
+                setUserId={setUserId}
+                setJwt={setJwt}
+              />
             )}
           />
           <Route
             path="/home"
             exact
             render={() =>
-              isLoggedIn ? (
-                <Home data={filteredReminders.current} />
+              jwt !== "" && jwt !== null ? (
+                <Home
+                  data={filteredReminders.current}
+                  fetchUserData={fetchUserData}
+                  fetchDataAndSetToday={fetchDataAndSetToday}
+                />
               ) : (
                 <Redirect to="/" />
               )
@@ -86,7 +117,7 @@ function App() {
             path="/create"
             exact
             render={() =>
-              isLoggedIn ? (
+              jwt !== "" && jwt !== null ? (
                 <CreateReminderPage setUpdate={setUpdate} />
               ) : (
                 <Redirect to="/" />
@@ -97,7 +128,7 @@ function App() {
             path="/profile"
             exact
             render={() =>
-              isLoggedIn ? (
+              jwt !== "" && jwt !== null ? (
                 <Profile data={callReminders} />
               ) : (
                 <Redirect to="/" />
@@ -108,7 +139,7 @@ function App() {
             path="/create/:id"
             exact
             render={() =>
-              isLoggedIn ? (
+              jwt !== "" && jwt !== null ? (
                 <CreateReminderPage
                   data={callReminders}
                   setUpdate={setUpdate}
