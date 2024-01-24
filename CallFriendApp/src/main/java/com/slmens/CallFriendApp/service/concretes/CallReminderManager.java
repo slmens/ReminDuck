@@ -1,17 +1,14 @@
 package com.slmens.CallFriendApp.service.concretes;
 
-import com.slmens.CallFriendApp.core.DayOfWeek;
-import com.slmens.CallFriendApp.core.DayOfWeekConverter;
 import com.slmens.CallFriendApp.dao.CallReminderRepository;
+import com.slmens.CallFriendApp.dao.UserRepository;
 import com.slmens.CallFriendApp.dto.requestDto.CallReminderSaveDTO;
 import com.slmens.CallFriendApp.dto.requestDto.CallReminderUpdateDTO;
 import com.slmens.CallFriendApp.entities.CallReminder;
+import com.slmens.CallFriendApp.entities.User;
 import com.slmens.CallFriendApp.service.abstracts.ICallReminderService;
-import org.aspectj.weaver.ast.Call;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,9 +19,11 @@ import java.util.UUID;
 public class CallReminderManager implements ICallReminderService {
 
     private final CallReminderRepository callReminderRepository;
+    private final UserRepository userRepository;
 
-    public CallReminderManager(CallReminderRepository callReminderRepository) {
+    public CallReminderManager(CallReminderRepository callReminderRepository, UserRepository userRepository) {
         this.callReminderRepository = callReminderRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -44,6 +43,8 @@ public class CallReminderManager implements ICallReminderService {
 
     @Override
     public Boolean save(CallReminderSaveDTO callReminderSaveDTO) {
+        Optional<User> userOpt = this.userRepository.findById(callReminderSaveDTO.getUser_id());
+        User user = userOpt.orElseThrow(() -> new RuntimeException("User not found"));
 
         CallReminder callReminderToSave = new CallReminder();
         callReminderToSave.setWhoToCall(callReminderSaveDTO.getWhoToCall());
@@ -51,6 +52,7 @@ public class CallReminderManager implements ICallReminderService {
         callReminderToSave.setCallReminderTime(callReminderSaveDTO.getCallReminderTime());
         callReminderToSave.setCallReminderDays(callReminderSaveDTO.getCallReminderDays());
         callReminderToSave.setDescription(callReminderSaveDTO.getDescription());
+        callReminderToSave.setUser(user);
         try {
             this.callReminderRepository.save(callReminderToSave);
 

@@ -14,7 +14,7 @@ export default function CreateReminderPage({ data, setUpdate }) {
 
   const [values, setValues] = useState({
     id: "",
-    whoToCall: "Name",
+    whoToCall: "",
     description: "",
     callReminderDays: [],
     callReminderTime: "10:00",
@@ -39,20 +39,28 @@ export default function CreateReminderPage({ data, setUpdate }) {
   }));
 
   // Method for handle creating the call reminders
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
+
+    const token = localStorage.getItem("auth");
+    const trimmedToken = token.substring(1, token.length - 1);
+    const userId = localStorage.getItem("id");
+    const trimmedId = userId.substring(1, token.length - 1);
+
     const reminderToCreate = {
       whoToCall: values.whoToCall,
       description: values.description,
       callReminderDays: values.callReminderDays,
       callReminderTime: values.callReminderTime,
+      user_id: userId,
     };
 
-    fetch(`http://localhost:8080/callReminder`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reminderToCreate),
-    })
+    await axios
+      .post("http://localhost:8080/callReminder/save", reminderToCreate, {
+        headers: {
+          Authorization: `Bearer ${trimmedToken}`,
+        },
+      })
       .then(() => {
         console.log("Reminder created");
       })
@@ -66,7 +74,7 @@ export default function CreateReminderPage({ data, setUpdate }) {
 
     //setSubmitSuccess(true);
 
-    history.push("/");
+    history.push("/home");
   };
 
   // Method for handle updating the call reminders

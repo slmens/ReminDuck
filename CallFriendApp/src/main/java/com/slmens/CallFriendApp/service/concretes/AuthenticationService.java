@@ -71,6 +71,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
         jwtAuthenticationResponse.setId(user.getId());
+        jwtAuthenticationResponse.setJwt(jwt);
         return jwtAuthenticationResponse;
     }
 

@@ -9,25 +9,28 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
+@Setter
 public class CallReminderSaveDTO {
 
     @NotBlank
-    @Column(name = "whoToCall")
     private String whoToCall;
 
-    @Column(name = "description")
+    @NotBlank
     private String description;
 
     @NotBlank
-    @Column(name = "callReminderTime")
     private LocalTime callReminderTime;
 
     @NotEmpty
-    @Column(name = "callReminderDays")
     private List<String> callReminderDays;
+
+    @NotNull
+    private UUID user_id;
 }
