@@ -31,11 +31,9 @@ function App() {
         setCallReminders(response.data);
         console.log(response.data);
       })
-      .then(() => {
-        setUpdate(true);
-      })
+      .then(() => {})
       .catch((error) => console.log({ error }))
-      .finally();
+      .finally(setUpdate(true));
   };
 
   const fetchUserData = async () => {
@@ -80,8 +78,9 @@ function App() {
   };
 
   useEffect(() => {
-    //fetchDataAndSetToday();
-  }, [update, isLoggedIn]);
+    setUpdate(false);
+    console.log("a");
+  }, [update, isLoggedIn, filteredReminders, callReminders]);
 
   return (
     <>

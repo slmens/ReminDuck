@@ -1,5 +1,6 @@
 package com.slmens.CallFriendApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.slmens.CallFriendApp.core.DayOfWeek;
 import jakarta.persistence.*;
@@ -42,7 +43,7 @@ public class CallReminder {
     @Column(name = "callReminderDays")
     private List<String> callReminderDays;
 
-    @JsonIgnoreProperties(value = {"callsToRemind"})
+    @JsonIgnore()
     @ManyToOne()
     private User user;
 }

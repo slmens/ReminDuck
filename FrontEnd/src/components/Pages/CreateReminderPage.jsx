@@ -45,14 +45,14 @@ export default function CreateReminderPage({ data, setUpdate }) {
     const token = localStorage.getItem("auth");
     const trimmedToken = token.substring(1, token.length - 1);
     const userId = localStorage.getItem("id");
-    const trimmedId = userId.substring(1, token.length - 1);
+    const trimmedId = userId.substring(1, userId.length - 1);
 
     const reminderToCreate = {
       whoToCall: values.whoToCall,
       description: values.description,
       callReminderDays: values.callReminderDays,
       callReminderTime: values.callReminderTime,
-      user_id: userId,
+      user_id: trimmedId,
     };
 
     await axios
@@ -64,17 +64,12 @@ export default function CreateReminderPage({ data, setUpdate }) {
       .then(() => {
         console.log("Reminder created");
       })
-      .then(() => {
-        setUpdate(false);
-      })
       .catch((error) => {
         console.error("Error creating reminder:", error);
       })
-      .finally();
+      .finally(history.push("/home"));
 
     //setSubmitSuccess(true);
-
-    history.push("/home");
   };
 
   // Method for handle updating the call reminders
@@ -93,7 +88,7 @@ export default function CreateReminderPage({ data, setUpdate }) {
     setUpdate(false);
     //setSubmitSuccess(true);
 
-    history.push("/");
+    history.push("/home");
   };
 
   useEffect(() => {

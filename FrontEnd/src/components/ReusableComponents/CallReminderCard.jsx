@@ -9,6 +9,8 @@ import axios from "axios";
 export default function CallReminderCard(props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const history = useHistory();
+  const token = localStorage.getItem("auth");
+  const trimmedToken = token.substring(1, token.length - 1);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -24,7 +26,11 @@ export default function CallReminderCard(props) {
     const handleDelete = async () => {
       try {
         // Implement your delete logic here
-        await axios.delete(`http://localhost:8080/callReminder/${props.id}`);
+        await axios.delete(`http://localhost:8080/callReminder/${props.id}`, {
+          headers: {
+            Authorization: `Bearer ${trimmedToken}`,
+          },
+        });
 
         // Show an alert after successful deletion
         alert("Call Reminder Deleted!");
