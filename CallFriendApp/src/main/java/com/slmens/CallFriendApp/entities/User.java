@@ -1,5 +1,6 @@
 package com.slmens.CallFriendApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -60,7 +61,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> authorities; */
 
-    @JsonIgnoreProperties(value = {"user"})
+    @JsonIgnore()
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     @Column(name = "callsToRemind")
     private List<CallReminder> callsToRemind;

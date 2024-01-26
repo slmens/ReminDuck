@@ -10,16 +10,22 @@ export default function Home({ data, fetchUserData, fetchDataAndSetToday }) {
   useEffect(() => {
     name = localStorage.getItem("name");
     const id = localStorage.getItem("id");
-    if (name === null) {
+    if (name === null || name == " ") {
       fetchUserData();
     }
 
-    // call remindera id yazmıyor
-    // id bazen null oluyor
-    // bazen name null oluyor
     // sesion storage kullan eğer session storageda varsa çekme de bu sayede gereksiz api calların önüne geçersin
-    // create yapamıyorum forbbiden veriyor
-    if (id !== " " || id !== null) {
+    // Her home'a geldiğinde çekme bunu da eğer yeni bir reminder eklenirse localstorage'a bir şey eklersin mesela true yaparsın,
+    //home'a dönüldüğünde o true ise çeker ve çektiği zaman onu false yapar
+    // edit fonksiyonları
+
+    // Reminder create edildikten sonra localstorageda updated değişkenini true yap
+    // home'a geldiğinde updated false değil ise yani bu null boş gibi durumları da kapsıyor o zaman api call yapsın ve ayrıca session storage boşsa da api call yapsın
+    // app'de ise bu dataları çektikten sonra bunların data kısımlarını sessionstorage'a yazsın ve updated'ı false'a çeksin ki home'a gelince sürekli gereksiz api call yapmasın
+
+    // home'u re render etme fikirleri:
+    // homeda bir değişken tutarız useEffect home a gelen data ile session storage'daki datayı karşılaştırır farklıysa o değişkeni set'ler ve re render olur.
+    if (id !== " " && id !== null) {
       fetchDataAndSetToday();
     }
   }, []);
