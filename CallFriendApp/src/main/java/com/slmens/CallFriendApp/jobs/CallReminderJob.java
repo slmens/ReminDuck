@@ -2,14 +2,11 @@ package com.slmens.CallFriendApp.jobs;
 
 import com.slmens.CallFriendApp.dao.CallReminderRepository;
 import com.slmens.CallFriendApp.entities.CallReminder;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
+import com.slmens.CallFriendApp.socket.WSService;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +18,14 @@ import java.util.List;
 @Component
 public class CallReminderJob{
 
+    private  final WSService wsService;
     private static final Logger LOGGER = LoggerFactory.getLogger(CallReminderJob.class);
-
-    @Autowired
     private CallReminderRepository callReminderRepository; // Assuming you have a repository for CallReminder
+
+    public CallReminderJob(WSService wsService, CallReminderRepository callReminderRepository) {
+        this.wsService = wsService;
+        this.callReminderRepository = callReminderRepository;
+    }
 
     @Scheduled(fixedDelay = 60000)
     public void execute() throws JobExecutionException {
@@ -41,6 +42,8 @@ public class CallReminderJob{
                     reminder.getCallReminderDays().contains(currentDayOfWeek.toString())) {
                 // Perform the action for the matching reminder
                 LOGGER.info("Calling {} - {}", reminder.getWhoToCall(), reminder.getDescription());
+                //wsService.sendPrivateNotification(reminder.getUser().getId(),reminder);
+                wsService.sendGlobalNotification(reminder);
             }
         }
     }
