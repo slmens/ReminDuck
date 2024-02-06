@@ -23,7 +23,7 @@ public class WSService {
 
     public void sendPrivateNotification(final UUID userId, CallReminder callReminder) {
         NotificationDTO notification = new NotificationDTO(callReminder.getId(),callReminder.getWhoToCall(),callReminder.getDescription(),callReminder.getCallReminderTime());
-
-        messagingTemplate.convertAndSendToUser(String.valueOf(userId),"/topic/privateNotifications", notification);
+        String destination = "/user/" + userId + "/queue/privateNotifications";
+        messagingTemplate.convertAndSend(destination, notification);
     }
 }

@@ -24,6 +24,7 @@
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
     "react-time-picker": "^6.6.0",
+    "react-toastify": "^10.0.4",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
     "sort-by": "^0.0.2",

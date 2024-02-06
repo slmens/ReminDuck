@@ -24,13 +24,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(final MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic"); // this is for sending
+        registry.enableSimpleBroker("/user", "/topic");
         registry.setApplicationDestinationPrefixes("/ws"); // this is for getting, root
+        registry.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
-        registry.addEndpoint("/notificationWebSocket")// was "our-websocket"
+        registry.addEndpoint("/notificationWebSocketRoom")// was "our-websocket"
                 .setAllowedOrigins("http://localhost:5173/")
                 .withSockJS();
     }

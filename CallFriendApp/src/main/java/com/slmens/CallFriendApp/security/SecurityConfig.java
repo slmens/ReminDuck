@@ -42,11 +42,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("websocket geldi");
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
-                                authorizeRequests.requestMatchers("/notificationWebSocket/**").permitAll()
+                                authorizeRequests.requestMatchers("/notificationWebSocketRoom/**").permitAll()
                         // other configurations...
                 )
                 .authorizeHttpRequests(x ->

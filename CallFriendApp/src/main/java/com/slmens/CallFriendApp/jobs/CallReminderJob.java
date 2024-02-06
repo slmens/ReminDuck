@@ -42,8 +42,8 @@ public class CallReminderJob{
                     reminder.getCallReminderDays().contains(currentDayOfWeek.toString())) {
                 // Perform the action for the matching reminder
                 LOGGER.info("Calling {} - {}", reminder.getWhoToCall(), reminder.getDescription());
-                //wsService.sendPrivateNotification(reminder.getUser().getId(),reminder);
-                wsService.sendGlobalNotification(reminder);
+                wsService.sendPrivateNotification(reminder.getUser().getId(),reminder);
+                //wsService.sendGlobalNotification(reminder);
             }
         }
     }
