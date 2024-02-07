@@ -31,7 +31,7 @@ export default function Home({ data, fetchUserData, fetchDataAndSetToday }) {
   }, []);
 
   return (
-    <div className="h-screen min-h-full bg-black">
+    <div className="h-screen min-h-screen bg-black">
       <NavBar />
       <div className="flex flex-col items-center bg-black pb-12">
         <h1 className="text-white text-center font-sans font-bold text-3xl">

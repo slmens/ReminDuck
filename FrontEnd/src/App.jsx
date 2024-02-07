@@ -8,6 +8,11 @@ import Home from "./components/Pages/Home";
 import Profile from "./components/Pages/Profile";
 import Auth from "./components/Auth/Auth";
 import { useLocalState } from "./util/useLocalStorage";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
   const [currentDay, setCurrentDay] = useState();
@@ -18,6 +23,14 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useLocalState("", "id");
   const [jwt, setJwt] = useLocalState("", "auth");
+  const isConnected = useRef(false);
+  const isNotified = useRef(false);
+
+  let stompClient = null;
+
+  const notifyFunc = (whoToCall) => {
+    toast(`You need to call ${whoToCall} right now!`);
+  };
 
   // This method fetches the all of the reminders
   const fetchCallReminderDataByUserId = async () => {
@@ -77,13 +90,57 @@ function App() {
     await compareDays();
   };
 
-  useEffect(() => {
-    setUpdate(false);
-    console.log("a");
-  }, [update, isLoggedIn, filteredReminders, callReminders]);
+  // websocket functions
+  function connect() {
+    if (isConnected.current) {
+      console.log("Already connected. Skipping connection attempt.");
+      return;
+    }
+
+    const userIdd = localStorage.getItem("id");
+    const formattedUserId = userIdd.replace(/^"(.*)"$/, "$1");
+
+    if (!userIdd) {
+      console.error("User ID not found in localStorage.");
+      return;
+    }
+
+    const socket = new SockJS(
+      "http://localhost:8080/notificationWebSocketRoom"
+    );
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+      console.log("Connected: " + frame);
+      isConnected.current = true;
+      stompClient.subscribe(
+        `/user/${formattedUserId}/queue/privateNotifications`,
+        function (message) {
+          isNotified.current = false;
+          handleReceivedNotification(JSON.parse(message.body));
+        }
+      );
+
+      stompClient.subscribe(`/topic/globalNotifications`, function (message) {
+        handleReceivedNotification(JSON.parse(message.body));
+      });
+    });
+  }
+
+  function handleReceivedNotification(message) {
+    notifyFunc(message.whoToCall);
+    isNotified.current = true;
+  }
+
+  if (!isConnected.current) {
+    connect();
+  }
+
+  useEffect(() => {}, [update, isLoggedIn, filteredReminders, callReminders]);
 
   return (
     <>
+      <ToastContainer />
       <BrowserRouter>
         <Switch>
           <Route
