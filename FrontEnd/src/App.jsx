@@ -20,8 +20,7 @@ function App() {
   const [callReminders, setCallReminders] = useState([]);
   const filteredReminders = useRef([]);
   const [update, setUpdate] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useLocalState("", "id");
+ 
   const [jwt, setJwt] = useLocalState("", "auth");
   const isConnected = useRef(false);
   const isNotified = useRef(false);
