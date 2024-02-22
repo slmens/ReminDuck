@@ -21,4 +21,34 @@ const fecthAllCards = async () => {
   }
 };
 
-export { fecthAllCards };
+const createCard = async (reminderToCreate) => {
+  await axiosInstance
+    .post("/callReminder/save", reminderToCreate, {
+      headers: {
+        Authorization: `Bearer ${cleanedToken}`,
+      },
+    })
+    .then(() => {
+      console.log("Reminder created");
+    })
+    .catch((error) => {
+      console.error("Error creating reminder:", error);
+    });
+};
+
+const updateCard = async (reminderToUpdate) => {
+  await axiosInstance
+    .put(`/callReminder/${reminderToUpdate.id}`, reminderToUpdate, {
+      headers: {
+        Authorization: `Bearer ${cleanedToken}`,
+      },
+    })
+    .then(() => {
+      console.log("Reminder updated");
+    })
+    .catch((error) => {
+      console.error("Error updating reminder:", error);
+    });
+};
+
+export { fecthAllCards, createCard, updateCard };

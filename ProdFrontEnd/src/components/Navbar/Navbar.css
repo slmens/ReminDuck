@@ -26,11 +26,13 @@ nav {
 .nav-btn {
   border-radius: 7px;
   padding: 10px 25px 10px 25px;
-  border: 1px solid rgb(2, 140, 145);
+  border: none;
   font-size: 1rem;
+  box-shadow: 0px 0px 10px 5px rgb(2, 140, 145);
 }
 
 #logout {
   background-color: red;
   color: white;
+  box-shadow: 0px 0px 10px 5px red;
 }

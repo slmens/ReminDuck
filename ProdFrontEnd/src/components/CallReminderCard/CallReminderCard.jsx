@@ -1,3 +1,4 @@
+/*
 import React, { useState } from "react";
 import "./CallReminderCard.css";
 import { useHistory } from "react-router-dom";
@@ -91,4 +92,6 @@ function CallReminderCard() {
   );
 }
 
+
 export default CallReminderCard;
+*/

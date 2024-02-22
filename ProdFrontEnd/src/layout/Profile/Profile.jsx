@@ -1,18 +1,14 @@
 /* eslint-disable no-unused-vars */
 import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { UserContext, useContext } from "../../context/UserContext";
 import Navbar from "../../components/Navbar/Navbar";
-import { fecthAllCards } from "../../service/CardReminderService.js";
 import "./Profile.css";
 
 function Profile() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["allCards"],
-    queryFn: () => fecthAllCards(),
-    onSuccess: (data) => console.log(data),
-  });
+  const { data } = useContext(UserContext);
 
   console.log(data);
+
   return (
     <div id="profile-container">
       <Navbar />
