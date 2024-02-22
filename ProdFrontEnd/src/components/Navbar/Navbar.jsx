@@ -16,7 +16,7 @@ function Navbar() {
         </button>
       </Link>
 
-      <div className="nav-btn-container">
+      <div id="nav-btn-container">
         <Link to="/create">
           <button className="nav-btn">Create</button>
         </Link>
@@ -26,7 +26,7 @@ function Navbar() {
         </Link>
 
         <Link to="/">
-          <button className="nav-btn" onClick={logOut}>
+          <button id="logout" className="nav-btn" onClick={logOut}>
             Log Out
           </button>
         </Link>

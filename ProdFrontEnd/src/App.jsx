@@ -10,9 +10,12 @@ import Auth from "./layout/Auth/Auth";
 import Home from "./layout/Home/Home";
 import CreateReminderPage from "./layout/CreateReminderPage/CreateReminderPage";
 import Profile from "./layout/Profile/Profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
+  const queryClient = new QueryClient();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useLocalState("", "id");
   const [jwt, setJwt] = useLocalState("", "au");
@@ -55,56 +58,67 @@ function App() {
     setLogInUserForm: setLogInUserForm,
     toggleForm: toggleForm,
     setPasswordChecker: setPasswordChecker,
+    passwordChecker: passwordChecker,
   };
 
   const dataContext = {};
+
+  useEffect(() => {
+    console.log(jwt);
+  }, [jwt]);
 
   return (
     <>
       <ToastContainer />
       <UserContext.Provider value={userContext}>
         <DataContext.Provider value={dataContext}>
-          <BrowserRouter>
-            <Switch>
-              <Route path="/" exact render={() => <Auth />} />
-              <Route
-                path="/home"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? <Home /> : <Redirect to="/" />
-                }
-              />
-              <Route
-                path="/create"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? (
-                    <CreateReminderPage />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route
-                path="/profile"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? <Profile /> : <Redirect to="/" />
-                }
-              />
-              <Route
-                path="/create/:id"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? (
-                    <CreateReminderPage />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-            </Switch>
-          </BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <Switch>
+                <Route path="/" exact render={() => <Auth />} />
+                <Route
+                  path="/home"
+                  exact
+                  render={() =>
+                    jwt !== "" && jwt !== null ? <Home /> : <Redirect to="/" />
+                  }
+                />
+                <Route
+                  path="/create"
+                  exact
+                  render={() =>
+                    jwt !== "" && jwt !== null ? (
+                      <CreateReminderPage />
+                    ) : (
+                      <Redirect to="/" />
+                    )
+                  }
+                />
+                <Route
+                  path="/profile"
+                  exact
+                  render={() =>
+                    jwt !== "" && jwt !== null ? (
+                      <Profile />
+                    ) : (
+                      <Redirect to="/" />
+                    )
+                  }
+                />
+                <Route
+                  path="/create/:id"
+                  exact
+                  render={() =>
+                    jwt !== "" && jwt !== null ? (
+                      <CreateReminderPage />
+                    ) : (
+                      <Redirect to="/" />
+                    )
+                  }
+                />
+              </Switch>
+            </BrowserRouter>
+          </QueryClientProvider>
         </DataContext.Provider>
       </UserContext.Provider>
     </>

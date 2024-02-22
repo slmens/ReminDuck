@@ -1,22 +1,29 @@
 import axios from "axios";
-import { UserContext, useContext } from "../context/UserContext.js";
+//import { useHistory } from "react-router-dom";
 
-export default function SendRequest(actionType, event) {
-  const {
-    createUserForm,
-    setCreateUserForm,
-    setIsRegister,
-    isRegister,
-    logInUserForm,
-    setUserId,
-    setIsLoggedIn,
-    setJwt,
-  } = useContext(UserContext);
-
-  event.preventDefault();
+export default function SendRequest(
+  actionType,
+  event,
+  createUserForm,
+  setCreateUserForm,
+  setIsRegister,
+  isRegister,
+  logInUserForm,
+  setUserId,
+  setIsLoggedIn,
+  setJwt,
+  history
+) {
   if (actionType === "signUp") {
+    console.log("fonksiyon çalıştı");
+    console.log;
+    console.log(createUserForm);
     axios
-      .post("http://localhost:8080/user/signUp", createUserForm)
+      .post("http://localhost:8080/user/signUp", createUserForm, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         console.log(res);
       })
@@ -32,6 +39,7 @@ export default function SendRequest(actionType, event) {
         console.warn(e);
       });
   } else if (actionType === "signIn") {
+    console.log(logInUserForm);
     axios
       .post("http://localhost:8080/user/signIn", logInUserForm)
       .then((res) => {
@@ -45,6 +53,7 @@ export default function SendRequest(actionType, event) {
       })
       .catch((e) => {
         console.warn(e);
+        return false;
       });
   }
 }

@@ -2,14 +2,45 @@
 
 import { UserContext, useContext } from "../../../context/UserContext";
 import SendRequest from "../../../util/SendRequest";
+import { useHistory } from "react-router-dom";
+import "../LogInForm/LogInForm.css";
 
 function LogInForm() {
-  const { logInUserForm, toggleForm, setLogInUserForm } =
-    useContext(UserContext);
+  const {
+    logInUserForm,
+    toggleForm,
+    setLogInUserForm,
+    createUserForm,
+    setCreateUserForm,
+    setIsRegister,
+    isRegister,
+    setUserId,
+    setIsLoggedIn,
+    setJwt,
+  } = useContext(UserContext);
 
-  const handleLogIn = (e) => {
+  const history = useHistory();
+
+  const handleLogIn = async (e) => {
+    e.preventDefault();
     // api call
-    SendRequest("signIn", e);
+    if (logInUserForm.username === "" || logInUserForm.password === "") {
+      alert("Please fill in all fields");
+    } else {
+      await SendRequest(
+        "signIn",
+        e,
+        createUserForm,
+        setCreateUserForm,
+        setIsRegister,
+        isRegister,
+        logInUserForm,
+        setUserId,
+        setIsLoggedIn,
+        setJwt,
+        history
+      );
+    }
   };
 
   const onChangeLogIn = (e) => {
@@ -22,14 +53,11 @@ function LogInForm() {
   };
 
   return (
-    <div>
+    <div id="login-form-container">
       <form onSubmit={handleLogIn}>
-        <div className="flex flex-col justify-center items-center">
-          <h2 className="mb-5 text-white text-5xl font-bold">Log In</h2>
-          <label
-            htmlFor="username"
-            className="mb-3 mt-3 text-1xl font-bold text-white"
-          >
+        <div id="login-form-inner-container">
+          <h2 id="auth-header">Log In</h2>
+          <label htmlFor="username" className="auth-label">
             Username
           </label>
           <input
@@ -40,13 +68,10 @@ function LogInForm() {
             value={logInUserForm.username}
             onChange={onChangeLogIn}
             maxLength={40}
-            className="w-60 h-14 rounded border-2 border-primary-color p-2"
+            className="auth-login-input"
           />
 
-          <label
-            htmlFor="password"
-            className="mb-3 mt-3 text-1xl font-bold text-white"
-          >
+          <label htmlFor="password" className="auth-label">
             Password
           </label>
           <input
@@ -57,21 +82,21 @@ function LogInForm() {
             value={logInUserForm.password}
             onChange={onChangeLogIn}
             maxLength={50}
-            className="w-60 h-14 rounded border-2 border-primary-color p-2 mb-3"
+            className="auth-login-input"
           />
 
           <button
             type="submit"
             name="register"
             onClick={handleLogIn}
-            className="py-2 px-12 rounded-lg border-4 border-primary-color mt-5 bg-white"
+            className="auth-login-button"
           >
             Log In
           </button>
 
           <button
             onClick={toggleForm}
-            className="py-2 px-10 rounded-lg border-3 text-sm border-primary-color mt-5 bg-white shadow-lg shadow-cyan-500/50"
+            className="auth-login-button"
             name="toLogIn"
           >
             Don&apos;t you have an account?

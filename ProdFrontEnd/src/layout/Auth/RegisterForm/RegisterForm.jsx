@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { UserContext, useContext } from "../../../context/UserContext";
 import SendRequest from "../../../util/SendRequest.js";
+import "../RegisterForm/RegisterForm.css";
 
 function RegisterForm() {
   const {
@@ -9,12 +10,35 @@ function RegisterForm() {
     toggleForm,
     setPasswordChecker,
     setCreateUserForm,
+    logInUserForm,
+    setIsRegister,
+    isRegister,
+    setUserId,
+    setIsLoggedIn,
+    setJwt,
   } = useContext(UserContext);
 
   const handleRegister = (e) => {
-    if (passwordChecker === createUserForm.password) {
-      console.log(createUserForm);
-      SendRequest("signUp", e);
+    e.preventDefault();
+    if (createUserForm.username === "" || createUserForm.password === "") {
+      alert("Please fill in all fields");
+    } else {
+      if (passwordChecker === createUserForm.password) {
+        console.log(createUserForm);
+        SendRequest(
+          "signUp",
+          e,
+          createUserForm,
+          setCreateUserForm,
+          setIsRegister,
+          isRegister,
+          logInUserForm,
+          setUserId,
+          setIsLoggedIn,
+          setJwt,
+          history
+        );
+      }
     }
   };
 
@@ -32,11 +56,11 @@ function RegisterForm() {
   };
 
   return (
-    <div>
+    <div id="register-form-container">
       <form onSubmit={handleRegister}>
-        <div className="flex flex-col justify-center items-center">
-          <h2 className="mb-5 text-white text-5xl font-bold">Create Account</h2>
-          <label htmlFor="mail" className="mb-3 text-1xl font-bold text-white">
+        <div id="register-form-inner-container">
+          <h2 id="auth-header">Create Account</h2>
+          <label htmlFor="mail" className="auth-label">
             Mail
           </label>
           <input
@@ -47,13 +71,10 @@ function RegisterForm() {
             value={createUserForm.mail}
             onChange={onChangeRegister}
             maxLength={50}
-            className="w-60 h-14 rounded border-2 border-primary-color p-2"
+            className="auth-register-input"
           />
 
-          <label
-            htmlFor="username"
-            className="mb-3 mt-3 text-1xl font-bold text-white"
-          >
+          <label htmlFor="username" className="auth-label">
             Username
           </label>
           <input
@@ -64,13 +85,10 @@ function RegisterForm() {
             value={createUserForm.username}
             onChange={onChangeRegister}
             maxLength={40}
-            className="w-60 h-14 rounded border-2 border-primary-color p-2"
+            className="auth-register-input"
           />
 
-          <label
-            htmlFor="password"
-            className="mb-3 mt-3 text-1xl font-bold text-white"
-          >
+          <label htmlFor="password" className="auth-label">
             Password
           </label>
           <input
@@ -81,13 +99,10 @@ function RegisterForm() {
             value={createUserForm.password}
             onChange={onChangeRegister}
             maxLength={50}
-            className="w-60 h-14 rounded border-2 border-primary-color p-2 mb-3"
+            className="auth-register-input"
           />
 
-          <label
-            htmlFor="passwordChecker"
-            className="mb-3 mt-3 text-1xl font-bold text-white"
-          >
+          <label htmlFor="passwordChecker" className="auth-label">
             Verify Password
           </label>
           <input
@@ -98,24 +113,24 @@ function RegisterForm() {
             value={passwordChecker}
             onChange={onChangeRegister}
             maxLength={50}
-            className="w-60 h-14 rounded border-2 border-primary-color p-2"
+            className="auth-register-input"
           />
 
           <button
             type="submit"
             name="register"
             onClick={handleRegister}
-            className="py-2 px-12 rounded-lg border-4 border-primary-color mt-5 bg-white"
+            className="auth-register-button"
           >
             Register
           </button>
 
           <button
             onClick={toggleForm}
-            className="py-2 px-10 rounded-lg border-3 text-sm border-primary-color mt-5 bg-white shadow-lg shadow-cyan-500/50"
+            className="auth-register-button"
             name="toLogIn"
           >
-            Are you already signed in?
+            Do you already have an account?
           </button>
         </div>
       </form>
