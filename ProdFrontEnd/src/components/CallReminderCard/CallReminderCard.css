@@ -1,0 +1,77 @@
+#call-reminder-card-container {
+  max-width: 300px;
+  height: 300px;
+  border: 1px solid aliceblue;
+  border-radius: 8px;
+  box-shadow: 0px 0px 30px 5px rgb(2, 140, 145);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#card-icon-container {
+  background-color: black;
+  position: relative;
+}
+
+#card-icon-container button {
+  background-color: black;
+  color: white;
+  border: none;
+  font-size: 2rem;
+}
+
+#card-top {
+  width: 65%;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#card-header {
+  font-size: 2.4rem;
+  font-weight: 800;
+  overflow: visible;
+  overflow: hidden; /* Add this line to hide overflowing content */
+  text-overflow: ellipsis; /* Add this line to show an ellipsis (...) for overflow */
+  white-space: normal; /* Add this line to prevent wrapping */
+}
+
+#dropdown-container {
+  position: absolute;
+  top: 20spx;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  color: white;
+  background-color: transparent;
+}
+
+#dropdown-container button {
+  background-color: tomato;
+  border-radius: 5px;
+  padding: 5px 20px 5px 20px;
+}
+
+#card-bottom {
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+#card-bottom-time-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
+}
