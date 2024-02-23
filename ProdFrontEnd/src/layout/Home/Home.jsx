@@ -28,8 +28,6 @@ function Home() {
         </h1>
         <div id="home-card-container">
           {data?.map((callReminder) => {
-            console.log(callReminder.callReminderDays);
-            console.log(currentDay);
             if (callReminder.callReminderDays.includes(currentDay)) {
               return (
                 <CallReminderCard

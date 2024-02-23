@@ -4,10 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useQuery } from "@tanstack/react-query";
-import {
-  fetchCallReminderByUserId,
-  fecthAllCards,
-} from "./service/CardReminderService.js";
+import { fetchCallReminderByUserId } from "./service/CardReminderService.js";
 import { UserContext } from "./context/UserContext";
 import { DataContext } from "./context/DataContext";
 import { useLocalState } from "./util/UseLocalStorage";
@@ -27,6 +24,8 @@ function App() {
   const [jwt, setJwt] = useLocalState("", "au");
   const [isRegister, setIsRegister] = useState(true);
   const [passwordChecker, setPasswordChecker] = useState("");
+  const [isUpdated, setIsUpdated] = useState(false);
+  const queryData = null;
 
   const [createUserForm, setCreateUserForm] = useState({
     username: "",
@@ -44,8 +43,8 @@ function App() {
   // DATA FETCHING START --------------------------------------------------------
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["allCards"],
-    queryFn: () => fecthAllCards(),
+    queryKey: ["allCards", queryData],
+    queryFn: () => fetchCallReminderByUserId(),
     onSuccess: (data) => console.log(data),
   });
 
@@ -90,6 +89,8 @@ function App() {
     setPasswordChecker: setPasswordChecker,
     passwordChecker: passwordChecker,
     data: data,
+    setIsUpdated: setIsUpdated,
+    isUpdated: isUpdated,
   };
 
   const dataContext = {};
@@ -100,6 +101,7 @@ function App() {
       isConnected,
       isNotified
     );
+    console.log("aaaaaaaa");
   }, []);
 
   return (

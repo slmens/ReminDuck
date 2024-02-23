@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import "./CreateReminderPage.css";
 
 function CreateReminderPage() {
+  const { setIsUpdated, isUpdated } = useContext(UserContext);
   const history = useHistory();
   const { id } = useParams();
   const { data } = useContext(UserContext);
@@ -40,11 +41,15 @@ function CreateReminderPage() {
 
   const create = async (e) => {
     await handleCreate(e, values, history);
+    setIsUpdated(true);
+    console.log(isUpdated);
     history.push("/home");
   };
 
   const update = async (e) => {
     await handleUpdate(e, values, history);
+    setIsUpdated(true);
+    console.log(isUpdated);
     history.push("/home");
   };
 

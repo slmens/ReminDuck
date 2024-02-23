@@ -2,10 +2,12 @@
 import axiosInstance from "./AxiosInstance.js";
 
 const jwtToken = localStorage.getItem("au");
-const cleanedToken = jwtToken.replace(/^"(.*)"$/, "$1");
+const cleanedToken = jwtToken ? jwtToken.replace(/^"(.*)"$/, "$1") : null;
+const userId = localStorage.getItem("id");
+const trimmedUserId = userId ? userId.replace(/^"(.*)"$/, "$1") : null;
 
 const fecthAllCards = async () => {
-  if (!jwtToken) {
+  if (!cleanedToken) {
     throw new Error("JWT token not found in localStorage");
   }
   try {
@@ -68,23 +70,26 @@ const deleteCard = async (reminderId) => {
     });
 };
 
-const fetchCallReminderByUserId = async (userId) => {
+const fetchCallReminderByUserId = async () => {
   if (!jwtToken) {
     throw new Error("JWT token not found in localStorage");
   }
-  await axiosInstance
-    .get(`/callReminder/byUser/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${cleanedToken}`,
-      },
-    })
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Error fetching call reminders by user id:", error);
-      throw new Error("Error fetching call reminders by user id:", error);
-    });
+
+  try {
+    const response = await axiosInstance.get(
+      `/callReminder/byUser/${trimmedUserId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${cleanedToken}`,
+        },
+      }
+    );
+
+    return response.data; // Make sure to return the data here
+  } catch (error) {
+    console.error("Error fetching call reminders by user id:", error);
+    throw new Error("Error fetching call reminders by user id:", error);
+  }
 };
 
 export {

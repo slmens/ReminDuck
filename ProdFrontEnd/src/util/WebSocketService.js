@@ -51,6 +51,7 @@ const WebSocketService = {
   },
 
   closeWebSocket: () => {
+    console.log(WebSocketService.stompClient, WebSocketService.isConnected);
     if (WebSocketService.stompClient && WebSocketService.isConnected) {
       // Check if the connection is established before disconnecting
       WebSocketService.stompClient.disconnect();
