@@ -51,4 +51,46 @@ const updateCard = async (reminderToUpdate) => {
     });
 };
 
-export { fecthAllCards, createCard, updateCard };
+const deleteCard = async (reminderId) => {
+  await axiosInstance
+    .delete(`/callReminder/${reminderId}`, {
+      headers: {
+        Authorization: `Bearer ${cleanedToken}`,
+      },
+    })
+    .then(() => {
+      console.log("Reminder deleted");
+      alert("Call Reminder Deleted!");
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error("Error deleting reminder:", error);
+    });
+};
+
+const fetchCallReminderByUserId = async (userId) => {
+  if (!jwtToken) {
+    throw new Error("JWT token not found in localStorage");
+  }
+  await axiosInstance
+    .get(`/callReminder/byUser/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${cleanedToken}`,
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching call reminders by user id:", error);
+      throw new Error("Error fetching call reminders by user id:", error);
+    });
+};
+
+export {
+  createCard,
+  updateCard,
+  deleteCard,
+  fecthAllCards,
+  fetchCallReminderByUserId,
+};

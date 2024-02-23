@@ -2,8 +2,12 @@
 
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useQuery } from "@tanstack/react-query";
-import { fecthAllCards } from "./service/CardReminderService.js";
+import {
+  fetchCallReminderByUserId,
+  fecthAllCards,
+} from "./service/CardReminderService.js";
 import { UserContext } from "./context/UserContext";
 import { DataContext } from "./context/DataContext";
 import { useLocalState } from "./util/UseLocalStorage";
@@ -12,9 +16,12 @@ import Auth from "./layout/Auth/Auth";
 import Home from "./layout/Home/Home";
 import CreateReminderPage from "./layout/CreateReminderPage/CreateReminderPage";
 import Profile from "./layout/Profile/Profile";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import WebSocketService from "./util/WebSocketService";
 
 function App() {
+  const isConnected = useRef(false);
+  const isNotified = useRef(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useLocalState("", "id");
   const [jwt, setJwt] = useLocalState("", "au");
@@ -52,6 +59,20 @@ function App() {
 
   // FORM FUNCTIONS END --------------------------------------------------------
 
+  // UTIL FUNCTIONS START --------------------------------------------------------
+
+  function handleReceivedNotification(message) {
+    notifyFunc(message.whoToCall);
+    isNotified.current = true;
+  }
+
+  const notifyFunc = (whoToCall) => {
+    toast(`You need to call ${whoToCall} right now!`);
+    isNotified.current = false;
+  };
+
+  // UTIL FUNCTIONS END --------------------------------------------------------
+
   // AŞAĞISI CONTEXT ------------------------------------------------------------
 
   const userContext = {
@@ -74,8 +95,12 @@ function App() {
   const dataContext = {};
 
   useEffect(() => {
-    console.log(jwt);
-  }, [jwt]);
+    WebSocketService.initializeWebSocket(
+      handleReceivedNotification,
+      isConnected,
+      isNotified
+    );
+  }, []);
 
   return (
     <>

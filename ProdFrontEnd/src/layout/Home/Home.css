@@ -3,3 +3,26 @@
   min-height: 100%;
   padding: 20px 20px 20px 20px;
 }
+
+#home-inner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 4vw 0px 4vw;
+}
+
+#home-header {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#home-card-container {
+  padding-top: 35px;
+  width: 100%;
+  display: grid;
+  gap: 45px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
