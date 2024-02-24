@@ -73,22 +73,26 @@ const deleteCard = async (reminderId) => {
 const fetchCallReminderByUserId = async () => {
   if (!jwtToken) {
     throw new Error("JWT token not found in localStorage");
-  }
+  } else {
+    if (userId == null) {
+      throw new Error("User ID not found in localStorage");
+    } else {
+      try {
+        const response = await axiosInstance.get(
+          `/callReminder/byUser/${trimmedUserId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cleanedToken}`,
+            },
+          }
+        );
 
-  try {
-    const response = await axiosInstance.get(
-      `/callReminder/byUser/${trimmedUserId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${cleanedToken}`,
-        },
+        return response.data; // Make sure to return the data here
+      } catch (error) {
+        console.error("Error fetching call reminders by user id:", error);
+        throw new Error("Error fetching call reminders by user id:", error);
       }
-    );
-
-    return response.data; // Make sure to return the data here
-  } catch (error) {
-    console.error("Error fetching call reminders by user id:", error);
-    throw new Error("Error fetching call reminders by user id:", error);
+    }
   }
 };
 

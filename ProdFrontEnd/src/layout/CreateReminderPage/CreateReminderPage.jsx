@@ -40,17 +40,23 @@ function CreateReminderPage() {
   }));
 
   const create = async (e) => {
-    await handleCreate(e, values, history);
-    setIsUpdated(true);
-    console.log(isUpdated);
-    history.push("/home");
+    if (values.callReminderDays.length === 0) {
+      alert("Please select a day to remind you to call");
+    } else {
+      await handleCreate(e, values, history);
+      setIsUpdated(true);
+      history.push("/home");
+    }
   };
 
   const update = async (e) => {
-    await handleUpdate(e, values, history);
-    setIsUpdated(true);
-    console.log(isUpdated);
-    history.push("/home");
+    if (values.callReminderDays.length === 0) {
+      alert("Please select a day to remind you to call");
+    } else {
+      await handleUpdate(e, values, history);
+      setIsUpdated(true);
+      history.push("/home");
+    }
   };
 
   // If id is undefined then it means we are on create / if id is not undefined we are on update
@@ -105,16 +111,18 @@ function CreateReminderPage() {
 
   useEffect(() => {
     if (id !== undefined) {
-      const reminderToUpdate = data.find((reminder) => reminder.id === id);
+      if (data !== undefined) {
+        const reminderToUpdate = data.find((reminder) => reminder.id === id);
 
-      if (reminderToUpdate) {
-        setValues({
-          id: reminderToUpdate.id,
-          whoToCall: reminderToUpdate.whoToCall,
-          description: reminderToUpdate.description,
-          callReminderDays: reminderToUpdate.callReminderDays,
-          callReminderTime: reminderToUpdate.callReminderTime,
-        });
+        if (reminderToUpdate) {
+          setValues({
+            id: reminderToUpdate.id,
+            whoToCall: reminderToUpdate.whoToCall,
+            description: reminderToUpdate.description,
+            callReminderDays: reminderToUpdate.callReminderDays,
+            callReminderTime: reminderToUpdate.callReminderTime,
+          });
+        }
       }
     }
   }, [id, data]);
