@@ -11,47 +11,53 @@ const WebSocketService = {
   ) => {
     let formattedUserId = null;
     const userId = localStorage.getItem("id");
-    if (userId != null) {
-      formattedUserId = userId.replace(/^"(.*)"$/, "$1");
-      WebSocketService.closeWebSocket();
-      const socket = new SockJS(
-        "http://localhost:8080/notificationWebSocketRoom"
-      );
-      WebSocketService.stompClient = Stomp.over(socket);
-
-      WebSocketService.stompClient.connect({}, function () {
-        console.log("WebSocket connected");
-        console.log("WebSocket state: ", socket.readyState); // Add this
-        isConnected.current = true;
-
-        if (formattedUserId) {
-          // Check if formattedUserId is not null
-          WebSocketService.stompClient.subscribe(
-            `/user/${formattedUserId}/queue/privateNotifications`,
-            function (message) {
-              isNotified.current = false;
-              handleReceivedNotification(JSON.parse(message.body));
-            }
-          );
-        }
-
-        WebSocketService.stompClient.subscribe(
-          `/topic/globalNotifications`,
-          function (message) {
-            handleReceivedNotification(JSON.parse(message.body));
-          }
+    formattedUserId = userId.replace(/^"(.*)"$/, "$1");
+    if (
+      formattedUserId &&
+      formattedUserId !== "null" &&
+      formattedUserId !== null &&
+      formattedUserId !== ""
+    ) {
+      if (!isConnected.current) {
+        const socket = new SockJS(
+          "http://localhost:8080/notificationWebSocketRoom"
         );
-      });
-      // Rest of your code that uses formattedUserId
-    } else {
-      // Handle the case when userId is null
-      console.error("User ID is null. Handle this case accordingly.");
-      return;
+        WebSocketService.stompClient = Stomp.over(socket);
+
+        WebSocketService.stompClient.connect({}, function (frame) {
+          if (frame && frame.command === "CONNECTED") {
+            isConnected.current = true;
+
+            if (formattedUserId) {
+              WebSocketService.stompClient.subscribe(
+                `/user/${formattedUserId}/queue/privateNotifications`,
+                function (message) {
+                  isNotified.current = false;
+                  handleReceivedNotification(JSON.parse(message.body));
+                }
+              );
+            }
+
+            WebSocketService.stompClient.subscribe(
+              `/topic/globalNotifications`,
+              function (message) {
+                handleReceivedNotification(JSON.parse(message.body));
+              }
+            );
+          }
+        });
+      } else {
+        console.log("Already connected");
+      }
     }
   },
 
   closeWebSocket: () => {
-    if (WebSocketService.stompClient && WebSocketService.isConnected) {
+    if (
+      WebSocketService.stompClient &&
+      WebSocketService.isConnected &&
+      WebSocketService.stompClient.connected
+    ) {
       // Check if the connection is established before disconnecting
       WebSocketService.stompClient.disconnect();
       WebSocketService.isConnected = false; // Set isConnected to false when the connection is closed

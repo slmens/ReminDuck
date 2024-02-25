@@ -4,12 +4,8 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useQuery } from "@tanstack/react-query";
-import {
-  fetchCallReminderByUserId,
-  fecthAllCards,
-} from "./service/CardReminderService.js";
+import { fetchCallReminderByUserId } from "./service/CardReminderService.js";
 import { UserContext } from "./context/UserContext";
-import { DataContext } from "./context/DataContext";
 import { useLocalState } from "./util/UseLocalStorage";
 import "./App.css";
 import Auth from "./layout/Auth/Auth";
@@ -18,6 +14,7 @@ import CreateReminderPage from "./layout/CreateReminderPage/CreateReminderPage";
 import Profile from "./layout/Profile/Profile";
 import { useEffect, useState, useRef } from "react";
 import WebSocketService from "./util/WebSocketService";
+import useCardQuery from "./queries/useCardQuery.jsx";
 
 function App() {
   const isConnected = useRef(false);
@@ -27,6 +24,7 @@ function App() {
   const [jwt, setJwt] = useLocalState("", "au");
   const [isRegister, setIsRegister] = useState(true);
   const [passwordChecker, setPasswordChecker] = useState("");
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const [createUserForm, setCreateUserForm] = useState({
     username: "",
@@ -43,11 +41,7 @@ function App() {
 
   // DATA FETCHING START --------------------------------------------------------
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["allCards"],
-    queryFn: () => fecthAllCards(),
-    onSuccess: (data) => console.log(data),
-  });
+  const data = useCardQuery({ id: userId });
 
   // DATA FETCHING END --------------------------------------------------------
 
@@ -89,10 +83,11 @@ function App() {
     toggleForm: toggleForm,
     setPasswordChecker: setPasswordChecker,
     passwordChecker: passwordChecker,
-    data: data,
+    data: data.query.data,
+    setIsUpdated: setIsUpdated,
+    isUpdated: isUpdated,
+    isConnected: isConnected,
   };
-
-  const dataContext = {};
 
   useEffect(() => {
     WebSocketService.initializeWebSocket(
@@ -100,55 +95,55 @@ function App() {
       isConnected,
       isNotified
     );
-  }, []);
+    data.query.refetch();
+    setIsUpdated(false);
+  }, [isUpdated, data.query.data, isConnected]);
 
   return (
     <>
       <ToastContainer />
       <UserContext.Provider value={userContext}>
-        <DataContext.Provider value={dataContext}>
-          <BrowserRouter>
-            <Switch>
-              <Route path="/" exact render={() => <Auth />} />
-              <Route
-                path="/home"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? <Home /> : <Redirect to="/" />
-                }
-              />
-              <Route
-                path="/create"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? (
-                    <CreateReminderPage />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-              <Route
-                path="/profile"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? <Profile /> : <Redirect to="/" />
-                }
-              />
-              <Route
-                path="/create/:id"
-                exact
-                render={() =>
-                  jwt !== "" && jwt !== null ? (
-                    <CreateReminderPage />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                }
-              />
-            </Switch>
-          </BrowserRouter>
-        </DataContext.Provider>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact render={() => <Auth />} />
+            <Route
+              path="/home"
+              exact
+              render={() =>
+                jwt !== "" && jwt !== null ? <Home /> : <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/create"
+              exact
+              render={() =>
+                jwt !== "" && jwt !== null ? (
+                  <CreateReminderPage />
+                ) : (
+                  <Redirect to="/" />
+                )
+              }
+            />
+            <Route
+              path="/profile"
+              exact
+              render={() =>
+                jwt !== "" && jwt !== null ? <Profile /> : <Redirect to="/" />
+              }
+            />
+            <Route
+              path="/create/:id"
+              exact
+              render={() =>
+                jwt !== "" && jwt !== null ? (
+                  <CreateReminderPage />
+                ) : (
+                  <Redirect to="/" />
+                )
+              }
+            />
+          </Switch>
+        </BrowserRouter>
       </UserContext.Provider>
     </>
   );

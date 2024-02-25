@@ -27,22 +27,21 @@ function Home() {
           Hello, <br /> This&apos;s All Of Your Calls For Today.
         </h1>
         <div id="home-card-container">
-          {data?.map((callReminder) => {
-            console.log(callReminder.callReminderDays);
-            console.log(currentDay);
-            if (callReminder.callReminderDays.includes(currentDay)) {
-              return (
-                <CallReminderCard
-                  key={callReminder.id}
-                  id={callReminder.id}
-                  header={callReminder.whoToCall}
-                  desc={callReminder.description}
-                  dateTime={callReminder.callReminderTime}
-                  days={callReminder.callReminderDays}
-                />
-              );
-            }
-          })}
+          {data !== undefined &&
+            data.map((callReminder) => {
+              if (callReminder.callReminderDays.includes(currentDay)) {
+                return (
+                  <CallReminderCard
+                    key={callReminder.id}
+                    id={callReminder.id}
+                    header={callReminder.whoToCall}
+                    desc={callReminder.description}
+                    dateTime={callReminder.callReminderTime}
+                    days={callReminder.callReminderDays}
+                  />
+                );
+              }
+            })}
         </div>
       </div>
     </div>
