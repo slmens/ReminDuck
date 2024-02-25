@@ -15,9 +15,6 @@ export default function SendRequest(
   history
 ) {
   if (actionType === "signUp") {
-    console.log("fonksiyon çalıştı");
-    console.log;
-    console.log(createUserForm);
     axios
       .post("http://localhost:8080/user/signUp", createUserForm, {
         headers: {
@@ -39,7 +36,6 @@ export default function SendRequest(
         console.warn(e);
       });
   } else if (actionType === "signIn") {
-    console.log(logInUserForm);
     axios
       .post("http://localhost:8080/user/signIn", logInUserForm)
       .then((res) => {
