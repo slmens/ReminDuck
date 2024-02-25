@@ -19,45 +19,43 @@ const WebSocketService = {
       formattedUserId !== ""
     ) {
       if (!isConnected.current) {
+        WebSocketService.closeWebSocket();
         const socket = new SockJS(
           "http://localhost:8080/notificationWebSocketRoom"
         );
         WebSocketService.stompClient = Stomp.over(socket);
 
-        WebSocketService.stompClient.connect({}, function (frame) {
-          if (frame && frame.command === "CONNECTED") {
-            isConnected.current = true;
+        WebSocketService.stompClient.connect({}, function () {
+          isConnected.current = true;
 
-            if (formattedUserId) {
-              WebSocketService.stompClient.subscribe(
-                `/user/${formattedUserId}/queue/privateNotifications`,
-                function (message) {
-                  isNotified.current = false;
-                  handleReceivedNotification(JSON.parse(message.body));
-                }
-              );
-            }
-
+          if (formattedUserId) {
+            // Check if formattedUserId is not null
             WebSocketService.stompClient.subscribe(
-              `/topic/globalNotifications`,
+              `/user/${formattedUserId}/queue/privateNotifications`,
               function (message) {
+                isNotified.current = false;
                 handleReceivedNotification(JSON.parse(message.body));
               }
             );
           }
+
+          WebSocketService.stompClient.subscribe(
+            `/topic/globalNotifications`,
+            function (message) {
+              handleReceivedNotification(JSON.parse(message.body));
+            }
+          );
         });
       } else {
         console.log("Already connected");
       }
+    } else {
+      console.log("girmedi");
     }
   },
 
   closeWebSocket: () => {
-    if (
-      WebSocketService.stompClient &&
-      WebSocketService.isConnected &&
-      WebSocketService.stompClient.connected
-    ) {
+    if (WebSocketService.stompClient && WebSocketService.isConnected) {
       // Check if the connection is established before disconnecting
       WebSocketService.stompClient.disconnect();
       WebSocketService.isConnected = false; // Set isConnected to false when the connection is closed
