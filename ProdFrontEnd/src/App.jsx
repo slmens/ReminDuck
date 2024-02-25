@@ -90,7 +90,6 @@ function App() {
   };
 
   useEffect(() => {
-    isConnected.current = false;
     WebSocketService.initializeWebSocket(
       handleReceivedNotification,
       isConnected,
