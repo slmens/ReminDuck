@@ -6,8 +6,7 @@ const handleCreate = async (e, values) => {
 
   const userId = localStorage.getItem("id");
   const trimmedId = userId.substring(1, userId.length - 1);
-  console.log(trimmedId);
-  console.log(userId);
+
   const reminderToCreate = {
     whoToCall: values.whoToCall,
     description: values.description,

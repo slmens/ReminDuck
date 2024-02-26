@@ -8,8 +8,6 @@ import "./Profile.css";
 function Profile() {
   const { data } = useContext(UserContext);
 
-  console.log(data);
-
   return (
     <div id="profile-container">
       <Navbar />

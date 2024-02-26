@@ -8,6 +8,7 @@ const useCardQuery = (id) => {
   const query = useQuery({
     queryKey: ["card", id],
     queryFn: () => fetchCallReminderByUserId(),
+    enabled: false, // Set enabled to false initially
   });
 
   return { query };

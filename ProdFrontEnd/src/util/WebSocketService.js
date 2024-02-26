@@ -19,7 +19,7 @@ const WebSocketService = {
       formattedUserId !== ""
     ) {
       if (!isConnected.current) {
-        WebSocketService.closeWebSocket();
+        //WebSocketService.closeWebSocket();
         const socket = new SockJS(
           "http://localhost:8080/notificationWebSocketRoom"
         );
@@ -55,7 +55,7 @@ const WebSocketService = {
   },
 
   closeWebSocket: () => {
-    if (WebSocketService.stompClient && WebSocketService.isConnected) {
+    if (WebSocketService.stompClient && WebSocketService.isConnected.current) {
       // Check if the connection is established before disconnecting
       WebSocketService.stompClient.disconnect();
       WebSocketService.isConnected = false; // Set isConnected to false when the connection is closed
