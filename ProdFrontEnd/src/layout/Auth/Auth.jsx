@@ -9,6 +9,10 @@ function Auth() {
   return (
     <div id="auth-container">
       {isRegister ? <LogInForm /> : <RegisterForm />}
+      <h1>
+        This project is for educational purposes only. Do not use your personal
+        data
+      </h1>
     </div>
   );
 }
